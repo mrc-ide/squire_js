@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha -r esm",
     "test:watch": "nodemon --watch . --exec 'npm test || true'",
-    "build": "./build.sh less_basic_model_for_js.R index.js build/squire.js",
+    "build:interface": "rollup index.js -f es --file build/interface.js",
+    "build": "npm run build:interface && ./build.sh less_basic_model_for_js.R build/interface.js build/squire.js",
     "e2e": "npm run build && node -r esm e2e/test.js"
   },
   "repository": {
@@ -18,6 +19,7 @@
   "devDependencies": {
     "esm": "^3.2.25",
     "mocha": "^7.1.1",
+    "rollup": "^2.6.1",
     "sinon": "^9.0.2"
   }
 }
