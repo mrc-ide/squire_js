@@ -1,0 +1,19 @@
+{
+  "name": "squire",
+  "version": "1.0.0",
+  "description": "A javascript implementation of the squire COVID-19 model",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "build": "./build.sh less_basic_model_for_js.R index.js build/squire.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/mrc-ide/squire_js"
+  },
+  "author": "Imperial College London",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^7.1.1"
+  }
+}
