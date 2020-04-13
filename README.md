@@ -1,5 +1,30 @@
 # squire.js
 
+
+### Requirements
+
+The required system and R packages are listed in the `Dockerfile`
+
+### Building
+
+You can build the javascript bundle by running:
+
+```
+npm install
+npm run build
+# outputs bundle in build/squire.js
+```
+
+### Tests
+
+You can run the end-to-end test with:
+
+```
+npm run e2e
+```
+
+### Usage
+
 You can access the model using ES6 import syntax:
 
 ```
@@ -33,3 +58,4 @@ The age group will be identified in square brackets. E.g. the "S[1]" column repr
 Y: A 2D array representing the rows of the table. The first dimension will depend on the time steps and resolution of the model. The second dimension will be the same size as "Names".
 
 The "runModel" function has several parameters that are not yet passed to the model. We will add these incrementally.
+
