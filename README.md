@@ -23,6 +23,12 @@ You can run the end-to-end test with:
 npm run e2e
 ```
 
+You can run the interface unit tests with:
+
+```
+npm test
+```
+
 ### Usage
 
 You can access the model using ES6 import syntax:
@@ -33,10 +39,30 @@ import { runModel } from './squire.js'
 
 runModel is the only exported function from file. It has the following signature:
 
-You can get some basic model output by running:
+```
+function runModel(
+  population,
+  mixingMatrix,
+  nBeds, //unused
+  nICUBeds, //unused
+  timeStart = 1,
+  timeEnd = 200
+  )
+```
+
+The population and mixingMatrix values are provided by the data dump.
+
+You can get some basic model output by running the following example:
 
 ```
-let results = runModel();
+let results = runModel(
+  { data: [ 100000, 1000000 ], dim: [2] },
+  { data: [ 5/100000, 2/100000, 2/100000, 5/100000 ], dim: [2, 2] },
+  5000,
+  1000,
+  1,
+  200
+);
 ```
 
 Results will be an object representing a table of data. It will have the following keys:
