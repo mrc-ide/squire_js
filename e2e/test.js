@@ -1,8 +1,14 @@
-import { runModel } from "../build/squire.js"
+import {
+  runModel,
+  getPopulation,
+  getMixingMatrix,
+  getBeta
+} from "../build/squire.js"
 
 let results = runModel(
-  { data: [ 100000, 1000000 ], dim: [2] },
-  { data: [ 5/100000, 2/100000, 2/100000, 5/100000 ], dim: [2, 2] },
+  getPopulation('Nigeria'),
+  getMixingMatrix('Nigeria'),
+  getBeta('Nigeria'),
   5000,
   1000,
   1,

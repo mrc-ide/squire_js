@@ -6,8 +6,8 @@
   "scripts": {
     "test": "mocha -r esm",
     "test:watch": "nodemon --watch . --exec 'npm test || true'",
-    "build:interface": "rollup src/index.js -f es --file build/interface.js",
-    "build": "npm run build:interface && ./build.sh less_basic_model_for_js.R build/interface.js build/squire.js",
+    "build:interface": "rollup -c",
+    "build": "npm run build:interface && ./build.sh explicit_SEIR_deterministic.R build/interface.js build/squire.js",
     "e2e": "npm run build && node -r esm e2e/test.js"
   },
   "repository": {
@@ -17,6 +17,7 @@
   "author": "Imperial College London",
   "license": "MIT",
   "devDependencies": {
+    "@rollup/plugin-json": "^4.0.2",
     "esm": "^3.2.25",
     "mocha": "^7.1.1",
     "rollup": "^2.6.1",

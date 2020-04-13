@@ -43,8 +43,8 @@ runModel is the only exported function from file. It has the following signature
 function runModel(
   population,
   mixingMatrix,
-  nBeds, //unused
-  nICUBeds, //unused
+  nBeds,
+  nICUBeds,
   timeStart = 1,
   timeEnd = 200
   )
