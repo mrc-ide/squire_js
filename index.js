@@ -1,32 +1,34 @@
+
+import { createOdinArray, processMixingMatrix } from './utils.js'
+
 export const runModel = function(
+  population
   mixingMatrix,
-  intStartTs,
-  intEndTs,
-  intEff,
-  nBeds,
-  nICUBeds,
+  nBeds, //unused
+  nICUBeds, //unused
   timeStart = 1,
   timeEnd = 200
   ) {
 
   const model = Object.values(odin)[0];
+  const nGroups = length(population);
   const user = {
-    S0: { data: [ 100000, 1000000 ], dim: [2] },
-    E0: { data: [ 0, 0 ], dim: [2] },
-    I_mild0: { data: [ 100, 100 ], dim: [2] },
-    I_hosp0: { data: [ 100, 100 ], dim: [2] },
-    I_ICU0: { data: [ 100, 100 ], dim: [2] },
-    R0: { data: [0, 0], dim: [2] },
-    D0: { data: [0, 0], dim: [2] },
+    S0: population,
+    E0: createOdinArray(Array(nGroups).fill(0)),
+    I_mild0: createOdinArray(Array(nGroups).fill(100)),
+    I_hosp0: createOdinArray(Array(nGroups).fill(100)),
+    I_ICU0: createOdinArray(Array(nGroups).fill(100)),
+    R0: createOdinArray(Array(nGroups).fill(0)),
+    D0: createOdinArray(Array(nGroups).fill(0)),
     gamma: 0.3,
     sigma: 0.3,
     mu: 0.01,
-    p_mild: { data: [0.33, 0.33], dim: [2] },
-    p_hosp: { data: [0.33, 0.33], dim: [2] },
-    p_ICU: { data: [0.34, 0.34], dim: [2] },
+    p_mild: createOdinArray(Array(nGroups).fill(0.33)),
+    p_hosp: createOdinArray(Array(nGroups).fill(0.33)),
+    p_ICU: createOdinArray(Array(nGroups).fill(0.34)),
     beta_1: 0.1,
     beta_2: 0.1,
-    m: { data: [ 5/100000, 2/100000, 2/100000, 5/100000 ], dim: [2, 2] }
+    m: createOdinArray(processMixingMatrix(mixingMatrix, population))
   }
 
   const mod = new model(user);

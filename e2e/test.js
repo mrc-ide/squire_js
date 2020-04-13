@@ -1,6 +1,13 @@
 import { runModel } from "../build/squire.js"
 
-let results = runModel();
+let results = runModel(
+  [ 100000, 1000000 ],
+  [ [ 5, 2 ], [2, 5] ],
+  5000,
+  1000,
+  1,
+  200
+);
 
 if (results.y.length == 1990 && results.y[0].length == 15 && results.names.length == 15) {
   console.log('passed');
