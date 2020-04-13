@@ -1,22 +1,25 @@
 
 export const createOdinArray = function(array) {
-  let dims = [];
+  let dim = [];
   let current = array;
   while (Array.isArray(current)) {
-    dims.push(length(array));
-    current = array[0];
+    dim.push(current.length);
+    current = current[0];
   }
-  let data = array.flat(dims.length());
-  if (data.length() != dims.reduce((a, b) => a * b, 1)) {
-    throw "Nested array has irregular sizes";
+  let data = flat(array, dim.length);
+  if (data.length != dim.reduce((a, b) => a * b, 1)) {
+    throw new Error("Nested array has irregular sizes");
   }
-  return { data, dims }
+  return { data, dim }
 }
 
-export const processMixingMatrix = function(matrix, population) {
-  let processed = Array(matrix.length()).fill(Array(matrix[0].length()));
-  for (let column = 0; column < processed[0].length(), ++column) {
-    for (let row = 0; row < processed.length(), ++row) {
+const flat = function(input, depth = 1, stack = []) {
+  for (let item of input) {
+    if (Array.isArray(item) && depth > 0) {
+      flat(item, depth - 1, stack);
+    } else {
+      stack.push(item);
     }
   }
+  return stack;
 }

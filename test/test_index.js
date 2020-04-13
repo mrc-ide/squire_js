@@ -1,6 +1,7 @@
 import { runModel } from '../index.js'
 import { strict as assert } from 'assert'
-import sinon from 'sinon-esm'
+
+var sinon = require('sinon');
 
 describe('runModel', function() {
   it('processes basic parameters correctly', function() {
@@ -32,15 +33,17 @@ describe('runModel', function() {
       run() {}
     }
 
+    global.odin = [ model ];
+
     runModel(
-      [ 100000, 1000000 ],
-      [ [ 5, 2 ], [2, 5] ],
+      { data: [ 100000, 1000000 ], dim: [2] },
+      { data: [ 5/100000, 2/100000, 2/100000, 5/100000 ], dim: [2, 2] },
       5000,
       1000,
       1,
       200
     );
 
-    assert.equals(constructor.getCall(0).args[0], expected);
+    assert.deepEqual(constructor.getCall(0).args[0], expected);
   });
 });

@@ -1,8 +1,8 @@
 
-import { createOdinArray, processMixingMatrix } from './utils.js'
+import { createOdinArray } from './utils.js'
 
 export const runModel = function(
-  population
+  population,
   mixingMatrix,
   nBeds, //unused
   nICUBeds, //unused
@@ -11,7 +11,7 @@ export const runModel = function(
   ) {
 
   const model = Object.values(odin)[0];
-  const nGroups = length(population);
+  const nGroups = population.data.length;
   const user = {
     S0: population,
     E0: createOdinArray(Array(nGroups).fill(0)),
@@ -28,7 +28,7 @@ export const runModel = function(
     p_ICU: createOdinArray(Array(nGroups).fill(0.34)),
     beta_1: 0.1,
     beta_2: 0.1,
-    m: createOdinArray(processMixingMatrix(mixingMatrix, population))
+    m: mixingMatrix
   }
 
   const mod = new model(user);

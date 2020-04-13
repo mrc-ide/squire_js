@@ -2,7 +2,7 @@ import { runModel } from "../build/squire.js"
 
 let results = runModel(
   [ 100000, 1000000 ],
-  [ [ 5, 2 ], [2, 5] ],
+  [ [ 5/100000, 2/100000 ], [2/100000, 5/100000] ],
   5000,
   1000,
   1,
