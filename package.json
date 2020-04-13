@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "build": "./build.sh less_basic_model_for_js.R index.js build/squire.js"
+    "build": "./build.sh less_basic_model_for_js.R index.js build/squire.js",
+    "e2e": "npm run build && node -r esm e2e/test.js"
   },
   "repository": {
     "type": "git",
@@ -14,6 +15,7 @@
   "author": "Imperial College London",
   "license": "MIT",
   "devDependencies": {
+    "esm": "^3.2.25",
     "mocha": "^7.1.1"
   }
 }

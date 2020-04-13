@@ -6,7 +6,7 @@ RUN R -e 'install.packages( \
   c("V8", "odin", "deSolve", "jsonlite", "remotes"), \
   repos = "https://demo.rstudiopm.com/cran/__linux__/xenial/latest")'
 
-RUN R -e 'library(remotes); install_github(c("mrc-ide/odin.js@mrc-1494", \
+RUN R -e 'library(remotes); install_github(c("mrc-ide/odin.js@mrc-1491", \
 "mrc-ide/squire@js_model_package"))'
 
 # Install node
