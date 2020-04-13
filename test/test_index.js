@@ -1,4 +1,4 @@
-import { runModel } from '../index.js'
+import { runModel } from '../src/index.js'
 import { strict as assert } from 'assert'
 
 var sinon = require('sinon');

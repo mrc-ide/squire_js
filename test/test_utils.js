@@ -1,4 +1,4 @@
-import { createOdinArray } from '../utils.js'
+import { createOdinArray } from '../src/utils.js'
 import { strict as assert } from 'assert'
 
 describe('createOdinArray', function() {
