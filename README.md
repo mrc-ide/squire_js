@@ -138,6 +138,3 @@ Names: The names of the columns of the table. The first name will be t, identify
 The age group will be identified in square brackets. E.g. the "S[1]" column represents the count for susceptables in the first age group.
 
 Y: A 2D array representing the rows of the table. The first dimension will depend on the time steps and resolution of the model. The second dimension will be the same size as "Names".
-
-The "runModel" function has several parameters that are not yet passed to the model. We will add these incrementally.
-
