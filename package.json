@@ -6,6 +6,7 @@
   "scripts": {
     "test": "mocha -r esm",
     "test:watch": "nodemon --watch . --exec 'npm test || true'",
+    "build:data": "Rscript ./R/export.R ./data",
     "build:interface": "rollup -c",
     "build": "npm run build:interface && ./build.sh explicit_SEIR_deterministic.R build/interface.js build/squire.js",
     "e2e": "node -r esm e2e/test.js"
