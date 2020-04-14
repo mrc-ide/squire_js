@@ -1,9 +1,9 @@
 
-import { createOdinArray } from './utils.js'
+import { createOdinArray, transpose3d, reshape3d } from './utils.js'
 import * as probs from './probabilities.js'
-import population from './population.json'
-import matrices from './matrices.json'
-import beta from './betas.json'
+import population from '../data/population.json'
+import matrices from '../data/matrices.json'
+import beta from '../data/betas.json'
 
 export const getCountries = () => Object.keys(population);
 export const getPopulation = (country) => { return population[country] };
@@ -12,12 +12,14 @@ export const getBeta = (country) => { return beta[country][0] };
 
 export const runModel = function(
   population,
-  mixingMatrix,
-  beta,
+  ttMatrix,
+  mixMatSet,
+  ttBeta,
+  betaSet,
   nBeds,
   nICUBeds,
   timeStart = 1,
-  timeEnd = 200
+  timeEnd = 250
   ) {
 
   const model = Object.values(odin)[0];
@@ -65,17 +67,24 @@ export const runModel = function(
     gamma_not_get_mv_survive: (2 * 1/12),
     gamma_not_get_mv_die: (2 * 1/1),
     gamma_rec: (2 * 1/6),
-    prob_hosp: probs.probHosp,
-    prob_severe: probs.probSevere,
-    prob_non_severe_death_treatment: probs.probNonSevereDeathTreatment,
-    prob_non_severe_death_no_treatment: probs.probNonSevereDeathNoTreatment,
-    prob_severe_death_treatment: probs.probSevereDeathTreatment,
-    prob_severe_death_no_treatment: probs.probNonSevereDeathNoTreatment,
+    prob_hosp: createOdinArray(probs.probHosp),
+    prob_severe: createOdinArray(probs.probSevere),
+    prob_non_severe_death_treatment: createOdinArray(probs.probNonSevereDeathTreatment),
+    prob_non_severe_death_no_treatment: createOdinArray(probs.probNonSevereDeathNoTreatment),
+    prob_severe_death_treatment: createOdinArray(probs.probSevereDeathTreatment),
+    prob_severe_death_no_treatment: createOdinArray(probs.probNonSevereDeathNoTreatment),
     p_dist: createOdinArray(Array(nGroups).fill(1)),
     hosp_bed_capacity: nBeds,
     ICU_bed_capacity: nICUBeds,
-    m: createOdinArray(mixingMatrix),
-    beta: beta
+    tt_matrix: createOdinArray(ttMatrix),
+    tt_beta: createOdinArray(ttBeta),
+    beta_set: createOdinArray(betaSet),
+    mix_mat_set: createOdinArray(
+      transpose3d(
+        reshape3d(mixMatSet, [nGroups, nGroups, ttMatrix.length]),
+        [3, 1, 2]
+      )
+    )
   }
 
   const mod = new model(user);

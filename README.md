@@ -1,5 +1,7 @@
 # squire.js
 
+This package is currently under development and testing. Please do not use in
+production.
 
 ### Requirements
 
@@ -12,7 +14,7 @@ You can build the javascript bundle by running:
 ```
 npm install
 npm run build
-# outputs bundle in build/squire.js
+# outputs a bundle in build/squire.js
 ```
 
 ### Tests
@@ -34,32 +36,86 @@ npm test
 You can access the model using ES6 import syntax:
 
 ```
-import { runModel } from './squire.js'
+import { runModel, getPopulation, getMixingMatrix, getBeta } from './squire.js'
 ```
 
-runModel is the only exported function from file. It has the following signature:
+#### getPopulation
+
+Returns the population for each age group in a country.
+
+The age groups are fixed to the following 17:
+
+0-4 5-9 10-14 15-19 20-24 25-29 30-34 35-39
+40-44 45-49 50-54 55-59 60-64 65-69 70-74 75-79 80+ 
+
+```
+getPopulation('Nigeria');
+# Outputs array of length 17
+```
+
+#### getMixingMatrix
+
+Returns the matrix representing the mixing between age groups in a country.
+
+```
+getMixingMatrix('Nigeria');
+# Outputs a 17 x 17 nested array
+```
+
+#### getBeta
+
+Returns the transmissibility parameter for the country.
+
+```
+getBeta('Nigeria');
+# returns value for beta
+```
+
+#### runModel
+
+This function is used to run the model and collect the output. It has the
+signature:
 
 ```
 function runModel(
   population,
-  mixingMatrix,
+  ttMatrix,
+  mixMatSet,
+  ttBeta,
+  betaSet,
   nBeds,
   nICUBeds,
   timeStart = 1,
-  timeEnd = 200
-  )
+  timeEnd = 250
+)
 ```
 
-The population and mixingMatrix values are provided by the data dump.
+Parameters:
+
+ * population - is an array of populations for each age group
+ * ttMatrix - is an array of timesteps at which the mixing matrix will change
+ * ttMatSet - is an array of mixing matrices to change to in line with
+   `ttMatrix`
+ * ttBeta - is an array of timsteps at which the transmissibility will change
+ * betaSet - is an array of beta values that will change in line with `ttBeta`
+ * nBeds - is the country's capacity for hosiptal beds
+ * nICUBeds - is the country's capacity in Intensive Care
+ * timeStart - is the timestep to begin the simulation
+ * timeStart - is the timestep to end the simulation
 
 You can get some basic model output by running the following example:
 
 ```
+const mm = getMixingMatrix('Nigeria')
+const beta = getBeta('Nigeria')
 let results = runModel(
-  { data: [ 100000, 1000000 ], dim: [2] },
-  { data: [ 5/100000, 2/100000, 2/100000, 5/100000 ], dim: [2, 2] },
-  5000,
-  1000,
+  getPopulation('Nigeria'),
+  [0, 50, 100],
+  [mm, mm, mm],
+  [0, 50, 200],
+  [beta, beta/2, beta],
+  10000000000,
+  10000000000,
   1,
   200
 );

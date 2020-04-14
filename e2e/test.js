@@ -5,17 +5,21 @@ import {
   getBeta
 } from "../build/squire.js"
 
+const mm = getMixingMatrix('Nigeria')
+const beta = getBeta('Nigeria')
 let results = runModel(
   getPopulation('Nigeria'),
-  getMixingMatrix('Nigeria'),
-  getBeta('Nigeria'),
-  5000,
-  1000,
+  [0, 50, 100],
+  [mm, mm, mm],
+  [0, 50, 200],
+  [beta, beta/2, beta],
+  10000000000,
+  10000000000,
   1,
   200
 );
 
-if (results.y.length == 1990 && results.y[0].length == 15 && results.names.length == 15) {
+if (results.y.length == 1990 && results.y[0].length == 443 && results.names.length == 443) {
   console.log('passed');
   process.exit();
 }
