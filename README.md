@@ -35,7 +35,7 @@ npm test
 
 You can access the model using ES6 import syntax:
 
-```
+```js
 import { runModel, getPopulation, getMixingMatrix, getBeta } from './squire.js'
 ```
 
@@ -48,27 +48,27 @@ The age groups are fixed to the following 17:
 0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-34, 35-39,
 40-44, 45-49, 50-54, 55-59, 60-64, 65-69, 70-74, 75-79, 80+ 
 
-```
+```js
 getPopulation('Nigeria');
-# Outputs array of length 17
+// Outputs array of length 17
 ```
 
 #### getMixingMatrix
 
 Returns the matrix representing the mixing between age groups in a country.
 
-```
+```js
 getMixingMatrix('Nigeria');
-# Outputs a 17 x 17 nested array
+// Outputs a 17 x 17 nested array
 ```
 
 #### getBeta
 
 Returns the transmissibility parameter for the country.
 
-```
+```js
 getBeta('Nigeria');
-# returns value for beta
+// returns value for beta
 ```
 
 #### runModel
@@ -76,7 +76,7 @@ getBeta('Nigeria');
 This function is used to run the model and collect the output. It has the
 signature:
 
-```
+```js
 function runModel(
   population,
   ttMatrix,
@@ -105,7 +105,7 @@ Parameters:
 
 You can get some basic model output by running the following example:
 
-```
+```js
 const mm = getMixingMatrix('Nigeria')
 const beta = getBeta('Nigeria')
 let results = runModel(
