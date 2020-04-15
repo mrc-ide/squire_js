@@ -1,10 +1,10 @@
-import { reshape3d, transpose312, flatten } from '../src/utils.js'
+import { reshape3d, transpose312, flatten_array } from '../src/utils.js'
 import { strict as assert } from 'assert'
 
-describe('flatten', function() {
-  it('flattens a 3d array in the correct order', function() {
+describe('flatten_array', function() {
+  it('flatten_arrays a 3d array in the correct order', function() {
     assert.deepEqual(
-      flatten([
+      flatten_array([
         [
           [1, 2, 3, 4],
           [5, 6, 7, 8],

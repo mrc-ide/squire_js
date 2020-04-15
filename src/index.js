@@ -27,13 +27,13 @@ export const runModel = function(
 
   const user = {
     ...pars,
-    S_0: population,
-    tt_matrix: ttMatrix,
-    mix_mat_set: transpose312(
-      reshape3d(mixMatSet, [nGroups, nGroups, ttMatrix.length])
-    ),
-    tt_beta: ttBeta,
-    beta_set: betaSet
+    //S_0: population,
+    //tt_matrix: ttMatrix,
+    //mix_mat_set: transpose312(
+      //reshape3d(mixMatSet, [nGroups, nGroups, ttMatrix.length])
+    //),
+    //tt_beta: ttBeta,
+    //beta_set: betaSet
   };
 
   const mod = new model(user);

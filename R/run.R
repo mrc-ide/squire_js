@@ -1,19 +1,32 @@
 library(squire)
 library(jsonlite)
 
+args = commandArgs(trailingOnly=TRUE)
+if (length(args) == 1) {
+  out_dir <- args[1]
+  new_user <- TRUE
+} else if (length(args) == 2) {
+  out_dir <- args[1]
+  new_user <- args[2]
+} else {
+  stop("The output directory is required as an argument")
+}
+
 # Probs
-prob_hosp <- c(0.000744192, 0.000634166,0.001171109, 0.002394593, 0.005346437 ,
-              0.010289885, 0.016234604, 0.023349169, 0.028944623, 0.038607042 ,
-              0.057734879, 0.072422135, 0.101602458, 0.116979814, 0.146099064,
-              0.176634654 ,0.180000000)
+prob_hosp <- c(
+    0.000744192, 0.000634166,0.001171109, 0.002394593, 0.005346437 ,
+    0.010289885, 0.016234604, 0.023349169, 0.028944623, 0.038607042 ,
+    0.057734879, 0.072422135, 0.101602458, 0.116979814, 0.146099064,
+    0.176634654 ,0.180000000)
 prob_severe <- c(0.05022296,	0.05022296,	0.05022296,	0.05022296,	0.05022296,
-                0.05022296,	0.05022296,	0.053214942, 0.05974426,	0.074602879,
-                0.103612417, 0.149427991, 0.223777304,	0.306985918,
-                0.385779555, 0.461217861, 0.709444444)
-prob_non_severe_death_treatment <- c(0.0125702,	0.0125702,	0.0125702,	0.0125702,
-                                    0.0125702,	0.0125702,	0.0125702,	0.013361147,
-                                    0.015104687,	0.019164124,	0.027477519,	0.041762108,
-                                    0.068531658,	0.105302319,	0.149305732,	0.20349534,	0.5804312)
+    0.05022296,	0.05022296,	0.053214942, 0.05974426,	0.074602879,
+    0.103612417, 0.149427991, 0.223777304,	0.306985918,
+    0.385779555, 0.461217861, 0.709444444)
+prob_non_severe_death_treatment <- c(
+    0.0125702,	0.0125702,	0.0125702,	0.0125702,
+    0.0125702,	0.0125702,	0.0125702,	0.013361147,
+    0.015104687,	0.019164124,	0.027477519,	0.041762108,
+    0.068531658,	0.105302319,	0.149305732,	0.20349534,	0.5804312)
 prob_non_severe_death_no_treatment <- vapply(prob_non_severe_death_treatment * 2, min, numeric(1), 1)
 prob_severe_death_treatment <- rep(0.5, length(prob_hosp))
 prob_severe_death_no_treatment <- rep(0.95, length(prob_hosp))
@@ -93,12 +106,35 @@ pars$ICU_bed_capacity <- 10000000000
 mod <- x(user = pars, use_dde = TRUE)
 t <- seq(from = 0, to = 249)
 output <- mod$run(t)
-write_json(
-  pars,
-  file.path('data/pars.json'),
-  auto_unbox=TRUE,
-  matrix='columnmajor',
-  pretty=TRUE,
-  digits=NA
-)
-write_json(output, 'data/output.json', pretty = TRUE, digits=NA)
+
+write_json(output, file.path(out_dir, 'output.json'), pretty = TRUE, digits=NA)
+
+if (new_user) {
+  write_json(
+    pars,
+    file.path(out_dir, 'pars.json'),
+    auto_unbox=TRUE,
+    matrix='columnmajor',
+    pretty=TRUE,
+    digits=NA
+  )
+} else {
+  to_json_user <- function(user) {
+    f <- function(x) {
+      if (inherits(x, "JS_EVAL")) {
+        class(x) <- "json"
+      } else if (is.array(x)) {
+        x <- list(data = c(x), dim = I(dim(x)))
+      } else if (length(x) > 1L || inherits(x, "AsIs")) {
+        x <- list(data = x, dim = I(length(x)))
+      }
+      x
+    }
+    if (length(user) > 0) {
+      stopifnot(!is.null(names(user)))
+    }
+    user <- lapply(user, f)
+    toJSON(user, auto_unbox = TRUE, json_verbatim = TRUE, digits = NA)
+  }
+  write(to_json_user(pars), file.path(out_dir, 'pars.json'))
+}

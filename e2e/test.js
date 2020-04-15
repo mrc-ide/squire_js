@@ -23,11 +23,38 @@ let results = runModel(
   250
 );
 
-const passed = results.y.every((row, i) => {
-  return row.every((value, j) => {
-    return Math.abs(value - expected[i][j]) < 1e-6
-  })
-})
+function approxEqualArray(x, y, tolerance) {
+  if (y.length !== x.length) {
+    throw Error("Incompatible arrays");
+  }
+  let scale = 0;
+  let xy = 0;
+  let n = 0;
+  for (let i = 0; i < x.length; ++i) {
+    if (x[i] !== y[i]) {
+      scale += Math.abs(x[i]);
+      xy += Math.abs(x[i] - y[i]);
+      n++;
+    }
+  }
+  if (n === 0) {
+    return true;
+  }
+
+  scale /= n;
+  xy /= n;
+
+  if (scale > tolerance) {
+    xy /= scale;
+  }
+  return xy < tolerance;
+}
+
+function getColumn(y, i) { return y.map(row => row[i]); }
+
+const passed = results.y[0].every((col, i) => {
+  return approxEqualArray(getColumn(results.y, i), getColumn(expected, i));
+});
 
 if (passed) {
   console.log('passed');
@@ -50,7 +77,6 @@ function absoluteError(actual, expected) {
   return diff.reduce((a, b) => a + b, 0) / diff.length;
 }
 
-function getColumn(y, i) { return y.map(row => row[i]); }
 
 const actual = results.y
 const rerrors = results.y[0].map((c, i) => {
