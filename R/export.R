@@ -31,7 +31,7 @@ processBeta <- function(c) {
   m <- get_mixing_matrix(c);
   p <- get_population(c)$n;
   m <- process_contact_matrix_scaled_age(m, p);
-  beta_est_explicit(dur_R, dur_hosp, prob_hosp, m, 3)
+  beta_est_explicit(dur_R, dur_hosp, prob_hosp, m, 2)
 }
 
 betas <- lapply(unique(population$country), processBeta)
