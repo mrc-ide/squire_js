@@ -5,8 +5,10 @@ import {
   getBeta
 } from "../build/squire.js"
 
-const mm = getMixingMatrix('Nigeria')
-const beta = getBeta('Nigeria')
+let fs = require('fs');
+
+const mm = getMixingMatrix('Nigeria');
+const beta = getBeta('Nigeria');
 let results = runModel(
   getPopulation('Nigeria'),
   [0, 50, 100],
@@ -16,9 +18,10 @@ let results = runModel(
   10000000000,
   10000000000,
   1,
-  200
+  250
 );
 
+fs.writeFileSync('./data/output_js.json', JSON.stringify(results.y, null, 4));
 if (results.y.length == 1990 && results.y[0].length == 443 && results.names.length == 443) {
   console.log('passed');
   process.exit();

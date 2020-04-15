@@ -88,7 +88,7 @@ export const runModel = function(
   }
 
   const mod = new model(user);
-  const dt = .1;
+  const dt = 1;
   let t = [];
   for (let i = 0; i < (timeEnd - timeStart) / dt; ++i) {
     t.push(timeStart + i * dt);
