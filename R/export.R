@@ -14,7 +14,8 @@ processMatrix <- function(c) {
   m <- get_mixing_matrix(c)
   p <- get_population(c)$n
   m <- process_contact_matrix_scaled_age(m, p)
-  t(t(m) / p)
+  mm <- t(t(m) / p)
+  aperm(array(c(mm), dim = c(dim(mm), 1)), c(3, 1, 2))
 }
 
 matrices <- lapply(unique(population$country), processMatrix)
@@ -37,6 +38,6 @@ betas <- lapply(unique(population$country), processBeta)
 names(betas) <- countries
 
 out_dir <- args[1]
-write_json(populations, file.path(out_dir, 'population.json'))
-write_json(matrices, file.path(out_dir, 'matrices.json'))
-write_json(betas, file.path(out_dir, 'betas.json'))
+write_json(populations, file.path(out_dir, 'population.json'), pretty=TRUE)
+write_json(matrices, file.path(out_dir, 'matrices.json'), matrix='columnmajor', pretty=TRUE)
+write_json(betas, file.path(out_dir, 'betas.json'), auto_unbox=TRUE)
