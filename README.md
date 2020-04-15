@@ -13,7 +13,6 @@ You can build the javascript bundle by running:
 
 ```
 npm install
-npm run build:data
 npm run build
 # outputs a bundle in build/squire.js
 ```
