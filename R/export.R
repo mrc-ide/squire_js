@@ -38,6 +38,6 @@ betas <- lapply(unique(population$country), processBeta)
 names(betas) <- countries
 
 out_dir <- args[1]
-write_json(populations, file.path(out_dir, 'population.json'), pretty=TRUE)
-write_json(matrices, file.path(out_dir, 'matrices.json'), matrix='columnmajor', pretty=TRUE)
-write_json(betas, file.path(out_dir, 'betas.json'), auto_unbox=TRUE)
+write_json(populations, file.path(out_dir, 'population.json'), pretty=TRUE, digits=NA)
+write_json(matrices, file.path(out_dir, 'matrices.json'), matrix='columnmajor', pretty=TRUE, digits=NA)
+write_json(betas, file.path(out_dir, 'betas.json'), auto_unbox=TRUE, digits=NA)

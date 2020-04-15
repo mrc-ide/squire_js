@@ -90,8 +90,15 @@ model_path <- file.path(
 x <- odin::odin(model_path)
 pars$hosp_bed_capacity <- 10000000000
 pars$ICU_bed_capacity <- 10000000000
-write_json(pars, file.path('data/pars.json'), auto_unbox=TRUE, matrix='columnmajor', pretty=TRUE)
-mod <- x(user = pars)
+mod <- x(user = pars, use_dde = TRUE)
 t <- seq(from = 0, to = 249)
 output <- mod$run(t)
-write_json(output, 'data/output.json', pretty = TRUE)
+write_json(
+  pars,
+  file.path('data/pars.json'),
+  auto_unbox=TRUE,
+  matrix='columnmajor',
+  pretty=TRUE,
+  digits=NA
+)
+write_json(output, 'data/output.json', pretty = TRUE, digits=NA)
