@@ -4,10 +4,12 @@ import {
   getMixingMatrix,
   getBeta
 } from "../src/index.js"
+
+import { flatten_array } from '../src/utils.js'
+
 import pars from '../data/pars.json'
 import { expect } from 'chai'
-
-const sinon = require('sinon');
+import sinon from 'sinon'
 
 describe('runModel', function() {
   it('processes basic parameters correctly', function() {
@@ -38,6 +40,16 @@ describe('runModel', function() {
       250
     );
 
-    expect(constructor.getCall(0).args[0]).to.deep.equal(expected);
+    const actual = constructor.getCall(0).args[0];
+    Object.keys(expected).forEach(key => {
+      expect(actual).to.have.property(key);
+      const value = actual[key];
+      if (Array.isArray(value)) {
+        const e_flat = flatten_array(expected[key]);
+        flatten_array(value).forEach((v, i) => {
+          expect(v).to.be.closeTo(e_flat[i], 1e-6);
+        })
+      }
+    })
   });
 });
