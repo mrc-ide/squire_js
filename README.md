@@ -85,7 +85,7 @@ function runModel(
   betaSet,
   nBeds,
   nICUBeds,
-  timeStart = 1,
+  timeStart = 0,
   timeEnd = 250
 )
 ```
@@ -101,7 +101,7 @@ Parameters:
  * nBeds - is the country's capacity for hosiptal beds
  * nICUBeds - is the country's capacity in Intensive Care
  * timeStart - is the timestep to begin the simulation
- * timeStart - is the timestep to end the simulation
+ * timeEnd - is the timestep to end the simulation
 
 You can get some basic model output by running the following example:
 

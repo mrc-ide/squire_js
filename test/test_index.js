@@ -100,6 +100,17 @@ describe('runModel', function() {
         10000000000,
         0,
         250
+      ],
+      [
+        [1, 2],
+        [0, 50, 100],
+        [[1, 2], [1, 2], [1, 2]], //wrong dimensionality
+        [0, 50, 200],
+        [beta, beta/2, beta],
+        3,
+        4,
+        0,
+        250
       ]
     ];
 

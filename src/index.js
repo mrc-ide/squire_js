@@ -1,5 +1,5 @@
 
-import { transpose312, reshape3d } from './utils.js'
+import { transpose312, reshape3d, wellFormedArray } from './utils.js'
 import population from '../data/population.json'
 import matrices from '../data/matrices.json'
 import beta from '../data/betas.json'
@@ -24,6 +24,10 @@ export const runModel = function(
 
   if (timeStart > timeEnd) {
     throw Error("timeStart is greater than timeEnd");
+  }
+
+  if (!wellFormedArray(mixMatSet, [mixMatSet.length, population.length, population.length])) {
+    throw Error("mixMatSet must have the dimensions t * nAge * nAge");
   }
 
   if (population.length !== mixMatSet[0].length) {
