@@ -10,7 +10,7 @@ import {
   getColumn
 } from './utils.js'
 
-import { flatten_array } from '../src/utils.js'
+import { flattenArray } from '../src/utils.js'
 
 import expected from "../data/output.json"
 
@@ -29,8 +29,8 @@ let results = runModel(
 );
 
 const passed = approxEqualArray(
-  flatten_array(results.y),
-  flatten_array(expected),
+  flattenArray(results.y),
+  flattenArray(expected),
   1e-6
 );
 

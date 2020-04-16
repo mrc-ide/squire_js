@@ -5,7 +5,7 @@ export const transpose312 = function(array) {
       () => Array(dim[1]).fill(0)
     )
   );
-  const data = flatten_array(array);
+  const data = flattenArray(array);
   let counter = 0;
   for (let third = 0; third < dim[1]; ++third) {
     for (let first = 0; first < dim[2]; ++first) {
@@ -27,7 +27,7 @@ export const reshape3d = function(array, dims) {
       () => Array(dims[0]).fill(0)
     )
   );
-  const data = flatten_array(array);
+  const data = flattenArray(array);
   let counter = 0;
   for (let first = 0; first < dims[2]; ++first) {
     for (let second = 0; second < dims[1]; ++second) {
@@ -47,9 +47,9 @@ const getDimSize = function(array, dim) {
   return getDimSize(array[0], dim - 1);
 }
 
-export const flatten_array = function(array) {
+export const flattenArray = function(array) {
   const flat = [].concat(...array);
-  return flat.some(Array.isArray) ? flatten_array(flat) : flat;
+  return flat.some(Array.isArray) ? flattenArray(flat) : flat;
 }
 
 export const wellFormedArray = function(array, dims) {
