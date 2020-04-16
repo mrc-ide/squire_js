@@ -8,8 +8,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      #- name: Build image
-        #run: docker build . -t squire
+      - name: Build image
+        run: docker build . -t squire
       - name: Run tests
-        run: |
-          docker run --rm -v $(PWD):/opt -w /opt squire bash -c "npm install && npm run build && npm run test && npm run e2e"
+        run: docker run --rm -v $(PWD):/opt -w /opt squire bash -c "npm install && npm run build && npm run test && npm run e2e"
