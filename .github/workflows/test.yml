@@ -8,5 +8,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
       - name: Run tests
         run: docker run --rm -v $(PWD):/opt -w /opt giovannic/squire bash -c "npm install && npm run build && npm run test && npm run e2e"

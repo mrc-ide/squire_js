@@ -52,4 +52,59 @@ describe('runModel', function() {
       }
     })
   });
+
+  it('Survives bad inputs', function() {
+    const mm = getMixingMatrix('Nigeria');
+    const beta = getBeta('Nigeria');
+    const badArguments = [
+      [
+        getPopulation('Nigeria'),
+        [0, 50, 100],
+        [mm, mm, mm],
+        [0, 50, 200],
+        [beta, beta/2, beta],
+        10000000000,
+        10000000000,
+        50, //start after end
+        10
+      ],
+      [
+        getPopulation('Nigeria'),
+        [0, 50, 100],
+        [mm, mm, mm],
+        [0, 50, 200],
+        [beta, beta/2], // missmatched beta
+        10000000000,
+        10000000000,
+        0,
+        250
+      ],
+      [
+        getPopulation('Nigeria').slice(2), //missmatched population
+        [0, 50, 100],
+        [mm, mm, mm],
+        [0, 50, 200],
+        [beta, beta/2, beta],
+        10000000000,
+        10000000000,
+        0,
+        250
+      ],
+      [
+        getPopulation('Nigeria'),
+        [0, 50, 100],
+        [mm, mm, mm],
+        [0, 50, 200],
+        [beta, beta/2, beta],
+        -3, // negative beds
+        10000000000,
+        0,
+        250
+      ]
+    ];
+
+    badArguments.forEach(args => {
+      expect(runModel.bind(...args)).to.throw(Error);
+    });
+  });
 });

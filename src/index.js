@@ -22,6 +22,26 @@ export const runModel = function(
   timeEnd = 250
   ) {
 
+  if (timeStart > timeEnd) {
+    throw Error("timeStart is greater than timeEnd");
+  }
+
+  if (population.length !== mixMatSet[0].length) {
+    throw Error("mismatch between population and mixing matrix size");
+  }
+
+  if (ttBeta.length !== betaSet.length) {
+    throw Error("mismatch between ttBeta and betaSet size");
+  }
+
+  if (ttMatrix.length !== mixMatSet.length) {
+    throw Error("mismatch between ttMatrix and mixMatSet size");
+  }
+
+  if (nBeds < 0 || nICUBeds < 0) {
+    throw Error("Bed counts must be greater than or equal to 0");
+  }
+
   const model = Object.values(odin)[0];
   const nGroups = population.length;
 
