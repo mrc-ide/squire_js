@@ -3,15 +3,10 @@ library(squire)
 library(jsonlite)
 
 args = commandArgs(trailingOnly=TRUE)
-if (length(args) == 1) {
-  out_dir <- args[1]
-  new_user <- TRUE
-} else if (length(args) == 2) {
-  out_dir <- args[1]
-  new_user <- args[2]
-} else {
+if (length(args) != 1) {
   stop("The output directory is required as an argument")
 }
+out_dir <- args[1]
 
 # Setting Up Model Parameters
 population <- squire::get_population("Nigeria")
@@ -20,7 +15,7 @@ m <- squire::get_mixing_matrix("Nigeria")
 m <- squire:::process_contact_matrix_scaled_age(m, population)
 dur_R <- 2.09
 dur_hosp <- 5
-beta <- squire::beta_est_explicit(dur_R, dur_hosp, prob_hosp, m, 2)
+beta <- squire::beta_est_explicit(dur_R, dur_hosp, prob_hosp, m, R0)
 
 pars <- list(N_age = length(population),
              S_0 = population,
@@ -91,32 +86,11 @@ output <- mod$run(t)
 
 write_json(output, file.path(out_dir, 'output.json'), pretty = TRUE, digits=NA)
 
-if (new_user) {
-  write_json(
-    pars,
-    file.path(out_dir, 'pars.json'),
-    auto_unbox=TRUE,
-    matrix='columnmajor',
-    pretty=TRUE,
-    digits=NA
-  )
-} else {
-  to_json_user <- function(user) {
-    f <- function(x) {
-      if (inherits(x, "JS_EVAL")) {
-        class(x) <- "json"
-      } else if (is.array(x)) {
-        x <- list(data = c(x), dim = I(dim(x)))
-      } else if (length(x) > 1L || inherits(x, "AsIs")) {
-        x <- list(data = x, dim = I(length(x)))
-      }
-      x
-    }
-    if (length(user) > 0) {
-      stopifnot(!is.null(names(user)))
-    }
-    user <- lapply(user, f)
-    toJSON(user, auto_unbox = TRUE, json_verbatim = TRUE, digits = NA)
-  }
-  write(to_json_user(pars), file.path(out_dir, 'pars.json'))
-}
+write_json(
+  pars,
+  file.path(out_dir, 'pars.json'),
+  auto_unbox=TRUE,
+  matrix='columnmajor',
+  pretty=TRUE,
+  digits=NA
+)
