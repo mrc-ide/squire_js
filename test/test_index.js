@@ -5,7 +5,7 @@ import {
   getBeta
 } from "../src/index.js"
 
-import { flattenArray } from '../src/utils.js'
+import { flattenNested } from '../src/utils.js'
 
 import pars from '../data/pars.json'
 import { expect } from 'chai'
@@ -45,8 +45,8 @@ describe('runModel', function() {
       expect(actual).to.have.property(key);
       const value = actual[key];
       if (Array.isArray(value)) {
-        const e_flat = flattenArray(expected[key]);
-        flattenArray(value).forEach((v, i) => {
+        const e_flat = flattenNested(expected[key]);
+        flattenNested(value).forEach((v, i) => {
           expect(v).to.be.closeTo(e_flat[i], 1e-6);
         })
       }
