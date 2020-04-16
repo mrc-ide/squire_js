@@ -1,3 +1,4 @@
+source('R/probs.R')
 library(squire)
 library(jsonlite)
 
@@ -21,10 +22,6 @@ processMatrix <- function(c) {
 matrices <- lapply(unique(population$country), processMatrix)
 names(matrices) <- countries
 
-prob_hosp <- c(0.000744192, 0.000634166,0.001171109, 0.002394593, 0.005346437,
-   0.010289885, 0.016234604, 0.023349169, 0.028944623, 0.038607042,
-   0.057734879, 0.072422135, 0.101602458, 0.116979814, 0.146099064,
-   0.176634654 ,0.180000000)
 dur_R <- 2.09
 dur_hosp <- 5
 processBeta <- function(c) {
