@@ -1,8 +1,5 @@
 # squire.js
 
-This package is currently under development and testing. Please do not use in
-production.
-
 ### Requirements
 
 The required system and R packages are listed in the `Dockerfile`
