@@ -7,8 +7,8 @@ if (length(args) != 1) {
   stop("The only argument is the output directory")
 }
 
-countries <- get_countries()
-populations <- lapply(unique(countries), function(c) get_population(c)$n)
+countries <- get_lmic_countries()
+populations <- lapply(countries, function(c) get_population(c)$n)
 names(populations) <- countries
 
 processMatrix <- function(c) {
@@ -19,7 +19,7 @@ processMatrix <- function(c) {
   aperm(array(c(mm), dim = c(dim(mm), 1)), c(3, 1, 2))
 }
 
-matrices <- lapply(unique(population$country), processMatrix)
+matrices <- lapply(countries, processMatrix)
 names(matrices) <- countries
 
 dur_R <- 2.09
@@ -31,7 +31,7 @@ processBeta <- function(c) {
   beta_est_explicit(dur_R, dur_hosp, prob_hosp, m, R0)
 }
 
-betas <- lapply(unique(population$country), processBeta)
+betas <- lapply(countries, processBeta)
 names(betas) <- countries
 
 out_dir <- args[1]
