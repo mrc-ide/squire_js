@@ -1,3 +1,5 @@
+![](https://github.com/mrc-ide/squire_js/workflows/.github/workflows/test.yml/badge.svg)
+
 # squire.js
 
 ### Requirements
