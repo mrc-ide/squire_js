@@ -1,4 +1,4 @@
-![](https://github.com/mrc-ide/squire_js/workflows/.github/workflows/test.yml/badge.svg)
+![](https://github.com/mrc-ide/squire_js/workflows/test/badge.svg)
 
 # squire.js
 
