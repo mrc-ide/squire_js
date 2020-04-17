@@ -1,4 +1,4 @@
-name: "Squire.js test"
+name: test
 
 on: [push]
 
