@@ -1,4 +1,4 @@
-R0 <- 2
+R0 <- 3
 prob_hosp <- c(
     0.000744192, 0.000634166,0.001171109, 0.002394593, 0.005346437 ,
     0.010289885, 0.016234604, 0.023349169, 0.028944623, 0.038607042 ,
@@ -16,5 +16,3 @@ prob_non_severe_death_treatment <- c(
 prob_non_severe_death_no_treatment <- vapply(prob_non_severe_death_treatment * 2, min, numeric(1), 1)
 prob_severe_death_treatment <- rep(0.5, length(prob_hosp))
 prob_severe_death_no_treatment <- rep(0.95, length(prob_hosp))
-
-

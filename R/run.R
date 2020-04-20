@@ -74,7 +74,6 @@ pars <- list(
   beta_set = c(beta, beta/2, beta)
 )
 
-
 model_path <- file.path(
   system.file('odin', package = 'squire', mustWork = TRUE),
   "explicit_SEIR_deterministic.R"
@@ -85,7 +84,12 @@ mod <- x(user = pars, use_dde = TRUE)
 t <- seq(from = 0, to = 249)
 output <- mod$run(t)
 
-write_json(output, file.path(out_dir, 'output.json'), pretty = TRUE, digits=NA)
+write_json(
+  output,
+  file.path(out_dir, 'output.json'),
+  pretty = TRUE,
+  digits=NA
+)
 write_json(
   pars,
   file.path(out_dir, 'pars.json'),

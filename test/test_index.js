@@ -2,7 +2,7 @@ import {
   runModel,
   getPopulation,
   getMixingMatrix,
-  getBeta
+  estimateBeta
 } from "../src/index.js"
 
 import { flattenNested } from '../src/utils.js'
@@ -27,13 +27,13 @@ describe('runModel', function() {
     global.odin = [ model ];
 
     const mm = getMixingMatrix('Nigeria');
-    const beta = getBeta('Nigeria');
+    const beta = estimateBeta('Nigeria', [3, 3/2, 3]);
     runModel(
       getPopulation('Nigeria'),
       [0],
       [mm],
       [0, 50, 200],
-      [beta, beta/2, beta],
+      beta,
       10000000000,
       10000000000,
       0,
@@ -62,7 +62,7 @@ describe('runModel', function() {
 
   it('Survives bad inputs', function() {
     const mm = getMixingMatrix('Nigeria');
-    const beta = getBeta('Nigeria');
+    const beta = estimateBeta('Nigeria', 3);
     const badArguments = [
       [
         getPopulation('Nigeria'),
@@ -124,5 +124,25 @@ describe('runModel', function() {
     badArguments.forEach(args => {
       expect(runModel.bind(...args)).to.throw(Error);
     });
+  });
+});
+
+describe('estimateBeta', function() {
+
+  it('gives expected scalar outputs', function() {
+    expect(estimateBeta('Nigeria', 3)).to.be.closeTo(0.1247291, 1e-6);
+  });
+
+  it('gives expected array outputs', function() {
+    const actual = estimateBeta('Nigeria', [3, 2]);
+    expect(actual[0]).to.be.closeTo(0.1247291, 1e-6);
+    expect(actual[1]).to.be.closeTo(0.08315272, 1e-6);
+  });
+
+  it('errors gracefully when the country cannot be found', function() {
+    expect(estimateBeta.bind('Non existent', 3)).to.throw(
+      Error,
+      'Unknown country'
+    );
   });
 });

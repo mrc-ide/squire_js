@@ -2,7 +2,7 @@ import {
   runModel,
   getPopulation,
   getMixingMatrix,
-  getBeta
+  estimateBeta
 } from "../build/squire.js"
 
 import {
@@ -15,13 +15,13 @@ import { flattenNested } from '../src/utils.js'
 import expected from "../data/output.json"
 
 const mm = getMixingMatrix('Nigeria');
-const beta = getBeta('Nigeria');
+const beta = estimateBeta('Nigeria', [3, 3/2, 3]);
 let results = runModel(
   getPopulation('Nigeria'),
   [0, 50, 100],
   [mm, mm, mm],
   [0, 50, 200],
-  [beta, beta/2, beta],
+  beta,
   10000000000,
   10000000000,
   0,
