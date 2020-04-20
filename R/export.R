@@ -35,6 +35,6 @@ eigens <- lapply(countries, processEigen)
 names(eigens) <- countries
 
 out_dir <- args[1]
-write_json(populations, file.path(out_dir, 'population.json'), pretty=TRUE, digits=NA)
-write_json(matrices, file.path(out_dir, 'matrices.json'), matrix='columnmajor', pretty=TRUE, digits=NA)
+write_json(populations, file.path(out_dir, 'population.json'), digits=NA)
+write_json(matrices, file.path(out_dir, 'matrices.json'), matrix='columnmajor', digits=NA)
 write_json(eigens, file.path(out_dir, 'eigens.json'), auto_unbox=TRUE, digits=NA)
