@@ -30,8 +30,8 @@ describe('runModel', function() {
     const beta = getBeta('Nigeria');
     runModel(
       getPopulation('Nigeria'),
-      [0, 50, 100],
-      [mm, mm, mm],
+      [0],
+      [mm],
       [0, 50, 200],
       [beta, beta/2, beta],
       10000000000,
@@ -44,11 +44,18 @@ describe('runModel', function() {
     Object.keys(expected).forEach(key => {
       expect(actual).to.have.property(key);
       const value = actual[key];
+      const expected_value = expected[key];
       if (Array.isArray(value)) {
-        const e_flat = flattenNested(expected[key]);
-        flattenNested(value).forEach((v, i) => {
-          expect(v).to.be.closeTo(e_flat[i], 1e-6);
-        })
+        if (value.length == 1) {
+          expect(value[0]).to.be.closeTo(expected_value, 1e-6);
+        } else {
+          const e_flat = flattenNested(expected[key]);
+          flattenNested(value).forEach((v, i) => {
+            expect(v).to.be.closeTo(e_flat[i], 1e-6);
+          })
+        }
+      } else {
+        expect(value).to.be.closeTo(expected_value, 1e-6);
       }
     })
   });

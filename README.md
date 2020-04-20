@@ -107,8 +107,8 @@ const mm = getMixingMatrix('Nigeria')
 const beta = getBeta('Nigeria')
 let results = runModel(
   getPopulation('Nigeria'),
-  [0, 50, 100],
-  [mm, mm, mm],
+  [0],
+  [mm],
   [0, 50, 200],
   [beta, beta/2, beta],
   10000000000,
