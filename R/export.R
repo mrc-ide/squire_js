@@ -24,17 +24,17 @@ names(matrices) <- countries
 
 dur_R <- 2.09
 dur_hosp <- 5
-processBeta <- function(c) {
+processEigen <- function(c) {
   m <- get_mixing_matrix(c)
   p <- get_population(c)$n
   m <- process_contact_matrix_scaled_age(m, p)
-  beta_est_explicit(dur_R, dur_hosp, prob_hosp, m, R0)
+  adjusted_eigen(dur_R, dur_hosp, prob_hosp, m)
 }
 
-betas <- lapply(countries, processBeta)
-names(betas) <- countries
+eigens <- lapply(countries, processEigen)
+names(eigens) <- countries
 
 out_dir <- args[1]
-write_json(populations, file.path(out_dir, 'population.json'), pretty=TRUE, digits=NA)
-write_json(matrices, file.path(out_dir, 'matrices.json'), matrix='columnmajor', pretty=TRUE, digits=NA)
-write_json(betas, file.path(out_dir, 'betas.json'), auto_unbox=TRUE, digits=NA)
+write_json(populations, file.path(out_dir, 'population.json'), digits=NA)
+write_json(matrices, file.path(out_dir, 'matrices.json'), matrix='columnmajor', digits=NA)
+write_json(eigens, file.path(out_dir, 'eigens.json'), auto_unbox=TRUE, digits=NA)

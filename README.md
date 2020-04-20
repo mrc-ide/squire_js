@@ -61,13 +61,17 @@ getMixingMatrix('Nigeria');
 // Outputs a 17 x 17 nested array
 ```
 
-#### getBeta
+#### estimateBeta
 
-Returns the transmissibility parameter for the country.
+Estimates the transmissibility parameter (beta) for a country, given R0. If an
+array of R0 is given, a corresponding array of beta estimates will be returned.
 
 ```js
-getBeta('Nigeria');
-// returns value for beta
+estimateBeta('Nigeria', 3);
+// returns an estimate for beta in Nigeria given an R0 of 3
+
+estimateBeta('Nigeria', [3, 3*.5, 3*.3, 3*.25]);
+// returns 4 estimates for beta in Nigeria given 4 different R0s
 ```
 
 #### runModel
@@ -106,13 +110,13 @@ You can get some basic model output by running the following example:
 
 ```js
 const mm = getMixingMatrix('Nigeria')
-const beta = getBeta('Nigeria')
+const beta = estimateBeta('Nigeria', [3, 3/2, 3])
 let results = runModel(
   getPopulation('Nigeria'),
-  [0, 50, 100],
-  [mm, mm, mm],
+  [0],
+  [mm],
   [0, 50, 200],
-  [beta, beta/2, beta],
+  beta,
   10000000000,
   10000000000,
   1,
