@@ -21,10 +21,13 @@
   "devDependencies": {
     "@rollup/plugin-json": "^4.0.2",
     "chai": "^4.2.0",
+    "chromedriver": "^81.0.0",
     "esm": "^3.2.25",
     "mocha": "^7.1.1",
     "nodemon": "^2.0.3",
     "rollup": "^2.6.1",
+    "selenium-webdriver": "^4.0.0-alpha.7",
     "sinon": "^9.0.2"
-  }
+  },
+  "dependencies": {}
 }
