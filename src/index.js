@@ -76,6 +76,5 @@ export const runModel = function(
     t.push(timeStart + i * dt);
   }
 
-  return mod.run(t, null, null, null, 1e-10, 1000000, 1e-10);
-  //return mod.run(t);
+  return mod.run(t);
 }
