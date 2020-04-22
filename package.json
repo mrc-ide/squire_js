@@ -19,13 +19,17 @@
   "author": "Imperial College London",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
     "@rollup/plugin-json": "^4.0.2",
+    "babel-preset-es2015-rollup": "^3.0.0",
     "chai": "^4.2.0",
     "chromedriver": "^81.0.0",
     "esm": "^3.2.25",
     "mocha": "^7.1.1",
     "nodemon": "^2.0.3",
     "rollup": "^2.6.1",
+    "rollup-plugin-babel": "^4.4.0",
     "selenium-webdriver": "^4.0.0-alpha.7",
     "sinon": "^9.0.2"
   },

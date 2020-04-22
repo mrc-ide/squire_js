@@ -1,11 +1,11 @@
 import {
   getPopulation,
   getMixingMatrix,
-  getBeta,
+  estimateBeta,
   runModel
 } from '../build/squire.js'
 
 window.getPopulation = getPopulation;
 window.getMixingMatrix = getMixingMatrix;
-window.getBeta = getBeta;
+window.estimateBeta = estimateBeta;
 window.runModel = runModel;

@@ -2,13 +2,22 @@
 import { transpose312, reshape3d, wellFormedArray } from './utils.js'
 import population from '../data/population.json'
 import matrices from '../data/matrices.json'
-import beta from '../data/betas.json'
-import pars from '../data/pars.json'
+import eigens from '../data/eigens.json'
+import pars from '../data/pars_0.json'
 
 export const getCountries = () => Object.keys(population);
 export const getPopulation = (country) => { return population[country] };
 export const getMixingMatrix = (country) => { return matrices[country] };
-export const getBeta = (country) => { return beta[country] };
+export const estimateBeta = (country, R0) => {
+  const lambda = eigens[country];
+  if (lambda == null) {
+    throw Error("Unknown country");
+  }
+  if (Array.isArray(R0)) {
+    return R0.map(r => { return r / lambda })
+  }
+  return R0 / lambda;
+};
 
 export const runModel = function(
   population,

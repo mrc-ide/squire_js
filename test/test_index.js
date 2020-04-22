@@ -2,12 +2,12 @@ import {
   runModel,
   getPopulation,
   getMixingMatrix,
-  getBeta
+  estimateBeta
 } from "../src/index.js"
 
 import { flattenNested } from '../src/utils.js'
 
-import pars from '../data/pars.json'
+import pars from '../data/pars_0.json'
 import { expect } from 'chai'
 import sinon from 'sinon'
 
@@ -26,36 +26,43 @@ describe('runModel', function() {
 
     global.odin = [ model ];
 
-    const mm = getMixingMatrix('Nigeria');
-    const beta = getBeta('Nigeria');
+    const mm = getMixingMatrix('St. Lucia');
+    const beta = estimateBeta('St. Lucia', [4, 2]);
     runModel(
-      getPopulation('Nigeria'),
-      [0, 50, 100],
-      [mm, mm, mm],
-      [0, 50, 200],
-      [beta, beta/2, beta],
-      10000000000,
-      10000000000,
+      getPopulation('St. Lucia'),
+      [0],
+      [mm],
+      [0, 50],
+      beta,
+      100,
+      100,
       0,
-      250
+      365
     );
 
     const actual = constructor.getCall(0).args[0];
     Object.keys(expected).forEach(key => {
       expect(actual).to.have.property(key);
       const value = actual[key];
+      const expected_value = expected[key];
       if (Array.isArray(value)) {
-        const e_flat = flattenNested(expected[key]);
-        flattenNested(value).forEach((v, i) => {
-          expect(v).to.be.closeTo(e_flat[i], 1e-6);
-        })
+        if (value.length == 1) {
+          expect(value[0]).to.be.closeTo(expected_value, 1e-6);
+        } else {
+          const e_flat = flattenNested(expected[key]);
+          flattenNested(value).forEach((v, i) => {
+            expect(v).to.be.closeTo(e_flat[i], 1e-6);
+          })
+        }
+      } else {
+        expect(value).to.be.closeTo(expected_value, 1e-6);
       }
     })
   });
 
   it('Survives bad inputs', function() {
     const mm = getMixingMatrix('Nigeria');
-    const beta = getBeta('Nigeria');
+    const beta = estimateBeta('Nigeria', 3);
     const badArguments = [
       [
         getPopulation('Nigeria'),
@@ -117,5 +124,25 @@ describe('runModel', function() {
     badArguments.forEach(args => {
       expect(runModel.bind(...args)).to.throw(Error);
     });
+  });
+});
+
+describe('estimateBeta', function() {
+
+  it('gives expected scalar outputs', function() {
+    expect(estimateBeta('Nigeria', 3)).to.be.closeTo(0.1247291, 1e-6);
+  });
+
+  it('gives expected array outputs', function() {
+    const actual = estimateBeta('Nigeria', [3, 2]);
+    expect(actual[0]).to.be.closeTo(0.1247291, 1e-6);
+    expect(actual[1]).to.be.closeTo(0.08315272, 1e-6);
+  });
+
+  it('errors gracefully when the country cannot be found', function() {
+    expect(estimateBeta.bind('Non existent', 3)).to.throw(
+      Error,
+      'Unknown country'
+    );
   });
 });
