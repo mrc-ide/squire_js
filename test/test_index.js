@@ -7,7 +7,7 @@ import {
 
 import { flattenNested } from '../src/utils.js'
 
-import pars from '../data/pars.json'
+import pars from '../data/pars_0.json'
 import { expect } from 'chai'
 import sinon from 'sinon'
 
@@ -26,18 +26,18 @@ describe('runModel', function() {
 
     global.odin = [ model ];
 
-    const mm = getMixingMatrix('Nigeria');
-    const beta = estimateBeta('Nigeria', [3, 3/2, 3]);
+    const mm = getMixingMatrix('St. Lucia');
+    const beta = estimateBeta('St. Lucia', [4, 2]);
     runModel(
-      getPopulation('Nigeria'),
+      getPopulation('St. Lucia'),
       [0],
       [mm],
-      [0, 50, 200],
+      [0, 50],
       beta,
-      10000000000,
-      10000000000,
+      100,
+      100,
       0,
-      250
+      365
     );
 
     const actual = constructor.getCall(0).args[0];

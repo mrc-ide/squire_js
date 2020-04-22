@@ -3,7 +3,7 @@ import { transpose312, reshape3d, wellFormedArray } from './utils.js'
 import population from '../data/population.json'
 import matrices from '../data/matrices.json'
 import eigens from '../data/eigens.json'
-import pars from '../data/pars.json'
+import pars from '../data/pars_0.json'
 
 export const getCountries = () => Object.keys(population);
 export const getPopulation = (country) => { return population[country] };
