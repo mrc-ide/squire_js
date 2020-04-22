@@ -1,5 +1,4 @@
 ![unit tests](https://github.com/mrc-ide/squire_js/workflows/test/badge.svg?branch=master)
-![browser tests](https://github.com/mrc-ide/squire_js/workflows/e2e/badge.svg?branch=master)
 
 # squire.js
 

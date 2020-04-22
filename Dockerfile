@@ -6,7 +6,7 @@ RUN R -e 'install.packages( \
   c("V8", "odin", "deSolve", "jsonlite", "remotes"))'
 
 RUN R -e 'library(remotes); install_github(c("mrc-ide/odin.js", \
-"mrc-ide/squire@squire_js"))'
+"mrc-ide/squire@f4c509b"))'
 
 # Install node
 RUN apt install -y curl
