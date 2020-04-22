@@ -93,7 +93,12 @@ async function test() {
       }
     }
   }
-  process.exit(failed);
+  return failed;
 }
 
-test();
+test()
+  .then(failed => { process.exit(failed) })
+  .catch(e => {
+    console.log(e);
+    process.exit(1)
+  });
