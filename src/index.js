@@ -58,9 +58,12 @@ export const runModel = function(
   const model = Object.values(odin)[0];
   const nGroups = population.length;
 
+  // Remove the seed exposed population
+  const true_pop = population.map((p, i) => { return p - pars.E1_0[i] });
+
   const user = {
     ...pars,
-    S_0: population,
+    S_0: true_pop,
     tt_matrix: ttMatrix,
     mix_mat_set: transpose312(
       reshape3d(mixMatSet, [nGroups, nGroups, ttMatrix.length])
