@@ -10,6 +10,9 @@ import expected from "../data/output.json"
 const webdriver = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const rollup = require('rollup');
+const chromedriver = require('chromedriver');
+
+chrome.setDefaultService(new chrome.ServiceBuilder(chromedriver.path).build());
 
 let options = new chrome.Options();
 options.addArguments("--disable-dev-shm-usage");
