@@ -11,4 +11,4 @@ jobs:
         with:
           ref: ${{ github.ref }}
       - name: Run tests
-        run: docker run --rm -v "$GITHUB_WORKSPACE":/opt -w /opt mrcide/squire:browser bash -c "npm install && npm run build && npm run test && npm run e2e"
+        run: docker run --rm -v "$GITHUB_WORKSPACE":/opt -w /opt mrcide/squire bash -c "npm install && npm run build && npm run test"

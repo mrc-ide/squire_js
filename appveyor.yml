@@ -1,0 +1,47 @@
+# Download script file from GitHub
+init:
+  ps: |
+        Invoke-WebRequest http://raw.github.com/krlmlr/r-appveyor/master/scripts/appveyor-tool.ps1 -OutFile "..\appveyor-tool.ps1"
+        Import-Module '..\appveyor-tool.ps1'
+
+install:
+  - ps: Bootstrap
+  - ps: Install-Product node $env:NODE_VERSION
+
+cache:
+  - C:\RLibrary
+
+environment:
+  NOT_CRAN: true
+  nodejs_version: "LTS"
+  # env vars that may need to be set, at least temporarily, from time to time
+  # see https://github.com/krlmlr/r-appveyor#readme for details
+  # USE_RTOOLS: true
+  # R_REMOTES_STANDALONE: true
+
+# Adapt as necessary starting from here
+
+build_script:
+  - R -e "install.packages(c('V8', 'odin', 'deSolve', 'jsonlite', 'remotes'), repos = 'https://cloud.r-project.org/')"
+  - R -e "remotes::install_github(c('mrc-ide/odin.js', 'mrc-ide/squire@squire_js'))"
+  - npm install
+  - npm run build
+
+test_script:
+  - npm run e2e
+
+on_failure:
+  - 7z a failure.zip failure_*.json
+  - 7z a expected.zip data\output_*.json
+  - appveyor PushArtifact failure.zip
+  - appveyor PushArtifact expected.zip
+
+artifacts:
+  - path: 'failure_*.json'
+    name: Logs
+
+  - path: 'data\output_*.json'
+    name: Logs
+
+  - path: 'build\squire.js'
+    name: Build
