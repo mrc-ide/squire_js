@@ -23,7 +23,7 @@ environment:
 
 build_script:
   - R -e "install.packages(c('V8', 'odin', 'deSolve', 'jsonlite', 'remotes'), repos = 'https://cloud.r-project.org/')"
-  - R -e "remotes::install_github(c('mrc-ide/odin.js', 'mrc-ide/squire@squire_js'))"
+  - R -e "remotes::install_github(c('mrc-ide/odin.js', 'mrc-ide/squire'))"
   - npm install
   - npm run build
 
