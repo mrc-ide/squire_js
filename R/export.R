@@ -1,4 +1,3 @@
-source('R/probs.R')
 library(squire)
 library(jsonlite)
 
@@ -28,7 +27,7 @@ processEigen <- function(c) {
   m <- get_mixing_matrix(c)
   p <- get_population(c)$n
   m <- process_contact_matrix_scaled_age(m, p)
-  adjusted_eigen(dur_R, dur_hosp, prob_hosp, m)
+  adjusted_eigen(dur_R, dur_hosp, default_probs()$prob_hosp, m)
 }
 
 eigens <- lapply(countries, processEigen)

@@ -7,7 +7,7 @@
     "test": "mocha -r esm",
     "test:watch": "nodemon --watch . --exec 'npm test || true'",
     "build:data": "Rscript ./R/export.R ./data && Rscript ./R/run.R ./data",
-    "build:odin": "./build.sh explicit_SEIR_deterministic.R build/squire.js",
+    "build:odin": "Rscript ./R/bundle.R explicit_SEIR_deterministic.R build/squire.js",
     "attach_interface": "rollup -c >> build/squire.js",
     "build": "npm run build:data && npm run build:odin && npm run attach_interface",
     "e2e": "node -r esm e2e/test.js"
@@ -29,6 +29,8 @@
     "nodemon": "^2.0.3",
     "rollup": "^2.6.1",
     "rollup-plugin-babel": "^4.4.0",
+    "selenium-webdriver": "^4.0.0-alpha.7",
     "sinon": "^9.0.2"
-  }
+  },
+  "dependencies": {}
 }
