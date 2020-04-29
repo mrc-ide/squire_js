@@ -60,6 +60,39 @@ describe('runModel', function() {
     })
   });
 
+  it('parameterises beds correctly', function() {
+    const expected = pars;
+
+    const constructor = sinon.spy();
+
+    class model {
+      constructor() {
+        constructor.apply(null, arguments);
+      }
+      run() {}
+    }
+
+    global.odin = [ model ];
+
+    const mm = getMixingMatrix('Nigeria');
+    const beta = estimateBeta('Nigeria', [3, 3/2, 3]);
+    runModel(
+      getPopulation('Nigeria'),
+      [0],
+      [mm],
+      [0, 50, 200],
+      beta,
+      10000,
+      100,
+      0,
+      250
+    );
+
+    const actual = constructor.getCall(0).args[0];
+    expect(actual.hosp_bed_capacity).to.be.equal(10000);
+    expect(actual.ICU_bed_capacity).to.be.equal(100);
+  });
+
   it('Survives bad inputs', function() {
     const mm = getMixingMatrix('Nigeria');
     const beta = estimateBeta('Nigeria', 3);

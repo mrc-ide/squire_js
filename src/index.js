@@ -69,7 +69,9 @@ export const runModel = function(
       reshape3d(mixMatSet, [nGroups, nGroups, ttMatrix.length])
     ),
     tt_beta: ttBeta,
-    beta_set: betaSet
+    beta_set: betaSet,
+    hosp_bed_capacity: nBeds,
+    ICU_bed_capacity: nICUBeds
   };
 
   const mod = new model(user);
