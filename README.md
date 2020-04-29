@@ -1,5 +1,5 @@
 ![Unit tests](https://github.com/mrc-ide/squire_js/workflows/test/badge.svg?branch=master)
-[![Browser tests](https://ci.appveyor.com/api/projects/status/30os3uq8qpbfeb52/branch/master?svg=true)](https://ci.appveyor.com/project/giovannic/squire-js/branch/master)
+![Browser tests](https://github.com/mrc-ide/squire_js/workflows/e2e/badge.svg?branch=master)
 
 # squire.js
 
