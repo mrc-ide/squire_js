@@ -9,7 +9,7 @@ const fs = require('fs')
 const webdriver = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const rollup = require('rollup');
-const tolerance = 1e-1;
+const tolerance = 1e-4;
 
 let options = new chrome.Options();
 options.addArguments("--disable-dev-shm-usage");
