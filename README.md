@@ -36,43 +36,7 @@ npm test
 You can access the model using ES6 import syntax:
 
 ```js
-import { runModel, getPopulation, getMixingMatrix, getBeta } from './squire.js'
-```
-
-#### getPopulation
-
-Returns the population for each age group in a country.
-
-The age groups are fixed to the following 17:
-
-0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-34, 35-39,
-40-44, 45-49, 50-54, 55-59, 60-64, 65-69, 70-74, 75-79, 80+ 
-
-```js
-getPopulation('Nigeria');
-// Outputs array of length 17
-```
-
-#### getMixingMatrix
-
-Returns the matrix representing the mixing between age groups in a country.
-
-```js
-getMixingMatrix('Nigeria');
-// Outputs a 17 x 17 nested array
-```
-
-#### estimateBeta
-
-Estimates the transmissibility parameter (beta) for a country, given R0. If an
-array of R0 is given, a corresponding array of beta estimates will be returned.
-
-```js
-estimateBeta('Nigeria', 3);
-// returns an estimate for beta in Nigeria given an R0 of 3
-
-estimateBeta('Nigeria', [3, 3*.5, 3*.3, 3*.25]);
-// returns 4 estimates for beta in Nigeria given 4 different R0s
+import { runModel } from './squire.js'
 ```
 
 #### runModel
@@ -83,8 +47,7 @@ signature:
 ```js
 function runModel(
   population,
-  ttMatrix,
-  mixMatSet,
+  contactMatrix,
   ttBeta,
   betaSet,
   nBeds,
@@ -97,9 +60,7 @@ function runModel(
 Parameters:
 
  * population - is an array of populations for each age group
- * ttMatrix - is an array of timesteps at which the mixing matrix will change
- * ttMatSet - is an array of mixing matrices to change to in line with
-   `ttMatrix`
+ * contactMatrix - is the contact matrix to use for the simulation
  * ttBeta - is an array of timsteps at which the transmissibility will change
  * betaSet - is an array of beta values that will change in line with `ttBeta`
  * nBeds - is the country's capacity for hosiptal beds
@@ -110,12 +71,11 @@ Parameters:
 You can get some basic model output by running the following example:
 
 ```js
-const mm = getMixingMatrix('Nigeria')
-const beta = estimateBeta('Nigeria', [3, 3/2, 3])
+import nigeriaData from './data/NGA.json';
+const beta = [nigeriaData.beta, nigeriaData.beta/2, nigeriaData.beta]);
 let results = runModel(
-  getPopulation('Nigeria'),
-  [0],
-  [mm],
+  nigeriaData.population,
+  nigeriaData.contactMatrix,
   [0, 50, 200],
   beta,
   10000000000,

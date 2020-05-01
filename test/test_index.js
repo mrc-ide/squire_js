@@ -1,15 +1,12 @@
-import {
-  runModel,
-  getPopulation,
-  getMixingMatrix,
-  estimateBeta
-} from "../src/index.js"
+import { runModel } from "../src/index.js"
 
 import { flattenNested } from '../src/utils.js'
 
-import pars from '../data/pars_0.json'
+import pars from '../data/pars_1.json'
 import { expect } from 'chai'
 import sinon from 'sinon'
+
+import stlucia from '../data/LCA.json'
 
 describe('runModel', function() {
   it('processes basic parameters correctly', function() {
@@ -26,12 +23,11 @@ describe('runModel', function() {
 
     global.odin = [ model ];
 
-    const mm = getMixingMatrix('St. Lucia');
-    const beta = estimateBeta('St. Lucia', [4, 2]);
+    const mm = stlucia.contactMatrix;
+    const beta = [stlucia.beta, stlucia.beta/2];
     runModel(
-      getPopulation('St. Lucia'),
-      [0],
-      [mm],
+      stlucia.population,
+      mm,
       [0, 50],
       beta,
       100,
@@ -74,12 +70,11 @@ describe('runModel', function() {
 
     global.odin = [ model ];
 
-    const mm = getMixingMatrix('Nigeria');
-    const beta = estimateBeta('Nigeria', [3, 3/2, 3]);
+    const mm = stlucia.contactMatrix;
+    const beta = [stlucia.beta, stlucia.beta/2, stlucia.beta];
     runModel(
-      getPopulation('Nigeria'),
-      [0],
-      [mm],
+      stlucia.population,
+      mm,
       [0, 50, 200],
       beta,
       10000,
@@ -94,13 +89,12 @@ describe('runModel', function() {
   });
 
   it('Survives bad inputs', function() {
-    const mm = getMixingMatrix('Nigeria');
-    const beta = estimateBeta('Nigeria', 3);
+    const mm = stlucia.contact_matrix;
+    const beta = [stlucia.beta, stlucia.beta/2, stlucia.beta];
     const badArguments = [
       [
-        getPopulation('Nigeria'),
-        [0, 50, 100],
-        [mm, mm, mm],
+        stlucia.population,
+        mm,
         [0, 50, 200],
         [beta, beta/2, beta],
         10000000000,
@@ -109,9 +103,8 @@ describe('runModel', function() {
         10
       ],
       [
-        getPopulation('Nigeria'),
-        [0, 50, 100],
-        [mm, mm, mm],
+        stlucia.population,
+        mm,
         [0, 50, 200],
         [beta, beta/2], // missmatched beta
         10000000000,
@@ -120,9 +113,8 @@ describe('runModel', function() {
         250
       ],
       [
-        getPopulation('Nigeria').slice(2), //missmatched population
-        [0, 50, 100],
-        [mm, mm, mm],
+        stlucia.population.slice(2), //missmatched population
+        mm,
         [0, 50, 200],
         [beta, beta/2, beta],
         10000000000,
@@ -131,9 +123,8 @@ describe('runModel', function() {
         250
       ],
       [
-        getPopulation('Nigeria'),
-        [0, 50, 100],
-        [mm, mm, mm],
+        stlucia.population,
+        mm,
         [0, 50, 200],
         [beta, beta/2, beta],
         -3, // negative beds
@@ -157,25 +148,5 @@ describe('runModel', function() {
     badArguments.forEach(args => {
       expect(runModel.bind(...args)).to.throw(Error);
     });
-  });
-});
-
-describe('estimateBeta', function() {
-
-  it('gives expected scalar outputs', function() {
-    expect(estimateBeta('Nigeria', 3)).to.be.closeTo(0.1247291, 1e-6);
-  });
-
-  it('gives expected array outputs', function() {
-    const actual = estimateBeta('Nigeria', [3, 2]);
-    expect(actual[0]).to.be.closeTo(0.1247291, 1e-6);
-    expect(actual[1]).to.be.closeTo(0.08315272, 1e-6);
-  });
-
-  it('errors gracefully when the country cannot be found', function() {
-    expect(estimateBeta.bind('Non existent', 3)).to.throw(
-      Error,
-      'Unknown country'
-    );
   });
 });

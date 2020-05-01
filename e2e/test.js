@@ -1,9 +1,9 @@
 import {
-  approxEqualArray,
-  getColumn
+  approxEqualArray
 } from './utils.js'
 
-import { flattenNested } from '../src/utils.js'
+import { flattenNested } from '../src/utils.js';
+import json from '@rollup/plugin-json';
 
 const fs = require('fs')
 const webdriver = require('selenium-webdriver');
@@ -23,31 +23,36 @@ let driver = new webdriver.Builder()
   .setChromeOptions(options)
   .build();
 
-async function test() {
-  let bundle = await rollup.rollup({ input: './e2e/test_script.js' });
+async function load() {
+  let bundle = await rollup.rollup({
+    input: './e2e/test_script.js',
+    plugins: json()
+  });
   bundle = await bundle.generate({ format: 'es' });
   bundle = bundle.output[0].code;
-  await driver.executeScript(
+  return await driver.executeScript(
   `var s=window.document.createElement('script');
       s.type = 'module';
       s.textContent = ${bundle};
       window.document.head.appendChild(s);`
   )
+}
 
+async function test() {
   let scenario = 0;
   let failed = false;
-  for (const country of [ 'St. Lucia', 'Nigeria', 'India' ]) {
+  for (const country of [ 'LCA', 'NGA', 'IND' ]) {
     for (const bed of [ 100, 100000, 100000000 ]) {
       for (const R0 of [ 4, 3, 2, 1 ]) {
+        let beta = JSON.parse(
+          fs.readFileSync(`./data/pars_${scenario}.json`)
+        ).beta_set;
         let results = await driver.executeScript(
-          `const mm = getMixingMatrix('${country}');
-          const beta = estimateBeta('${country}', [${R0}, ${R0/2}]);
-          return runModel(
-            getPopulation('${country}'),
-            [0],
-            [mm],
+          `return runModel(
+            ${country}.population,
+            ${country}.contactMatrix,
             [0, 50],
-            beta,
+            [${beta}],
             ${bed},
             ${bed},
             0,
@@ -93,8 +98,13 @@ async function test() {
   return failed;
 }
 
-test()
-  .then(failed => { process.exit(failed) })
+async function run() {
+  await load();
+  const failed = await test();
+  process.exit(failed);
+}
+
+run()
   .catch(e => {
     console.log(e);
     process.exit(1)

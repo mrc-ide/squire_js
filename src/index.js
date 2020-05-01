@@ -1,27 +1,9 @@
 
-import { transpose312, reshape3d, wellFormedArray } from './utils.js'
-import population from '../data/population.json'
-import matrices from '../data/matrices.json'
-import eigens from '../data/eigens.json'
+import { wellFormedArray } from './utils.js'
 import pars from '../data/pars_0.json'
-
-export const getCountries = () => Object.keys(population);
-export const getPopulation = (country) => { return population[country] };
-export const getMixingMatrix = (country) => { return matrices[country] };
-export const estimateBeta = (country, R0) => {
-  const lambda = eigens[country];
-  if (lambda == null) {
-    throw Error("Unknown country");
-  }
-  if (Array.isArray(R0)) {
-    return R0.map(r => { return r / lambda })
-  }
-  return R0 / lambda;
-};
 
 export const runModel = function(
   population,
-  ttMatrix,
   mixMatSet,
   ttBeta,
   betaSet,
@@ -35,8 +17,8 @@ export const runModel = function(
     throw Error("timeStart is greater than timeEnd");
   }
 
-  if (!wellFormedArray(mixMatSet, [mixMatSet.length, population.length, population.length])) {
-    throw Error("mixMatSet must have the dimensions t * nAge * nAge");
+  if (!wellFormedArray(mixMatSet, [population.length, population.length, 1])) {
+    throw Error("mixMatSet must have the dimensions nAge x nAge x 1");
   }
 
   if (population.length !== mixMatSet[0].length) {
@@ -45,10 +27,6 @@ export const runModel = function(
 
   if (ttBeta.length !== betaSet.length) {
     throw Error("mismatch between ttBeta and betaSet size");
-  }
-
-  if (ttMatrix.length !== mixMatSet.length) {
-    throw Error("mismatch between ttMatrix and mixMatSet size");
   }
 
   if (nBeds < 0 || nICUBeds < 0) {
@@ -64,10 +42,8 @@ export const runModel = function(
   const user = {
     ...pars,
     S_0: true_pop,
-    tt_matrix: ttMatrix,
-    mix_mat_set: transpose312(
-      reshape3d(mixMatSet, [nGroups, nGroups, ttMatrix.length])
-    ),
+    tt_matrix: [0],
+    mix_mat_set: mixMatSet,
     tt_beta: ttBeta,
     beta_set: betaSet,
     hosp_bed_capacity: nBeds,
