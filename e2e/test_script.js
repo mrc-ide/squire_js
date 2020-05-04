@@ -1,11 +1,10 @@
-import {
-  getPopulation,
-  getMixingMatrix,
-  estimateBeta,
-  runModel
-} from '../build/squire.js'
+import { runModel } from '../build/squire.js'
+import LCA from '../data/LCA.json'
+import NGA from '../data/NGA.json'
+import IND from '../data/IND.json'
 
-window.getPopulation = getPopulation;
-window.getMixingMatrix = getMixingMatrix;
-window.estimateBeta = estimateBeta;
+
 window.runModel = runModel;
+window.LCA = LCA
+window.NGA = NGA;
+window.IND = IND;

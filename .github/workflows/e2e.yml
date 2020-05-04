@@ -21,7 +21,7 @@ jobs:
       - name: Install squire
         run: |
           R.exe -e "install.packages(c('V8', 'odin', 'deSolve', 'jsonlite', 'remotes'))"
-          R.exe -e "remotes::install_github(c('mrc-ide/odin.js', 'mrc-ide/squire@squire_js'))"
+          R.exe -e "remotes::install_github(c('mrc-ide/odin.js', 'mrc-ide/squire@feat/shared_parameters'))"
         shell: pwsh
       - name: Install Chrome
         run: |

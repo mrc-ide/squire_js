@@ -24,5 +24,3 @@ export function approxEqualArray(x, y, tolerance) {
   }
   return xy < tolerance;
 }
-
-export function getColumn(y, i) { return y.map(row => row[i]); }
