@@ -1,5 +1,6 @@
 ![Unit tests](https://github.com/mrc-ide/squire_js/workflows/test/badge.svg?branch=master)
 ![Browser tests](https://github.com/mrc-ide/squire_js/workflows/e2e/badge.svg?branch=master)
+[![DOI](https://zenodo.org/badge/255333455.svg)](https://zenodo.org/badge/latestdoi/255333455)
 
 # squire.js
 
