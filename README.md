@@ -62,9 +62,9 @@ Parameters:
 
  * population - is an array of populations for each age group
  * contactMatrix - is the contact matrix to use for the simulation
- * ttBeta - is an array of timsteps at which the transmissibility will change
+ * ttBeta - is an array of timesteps at which the transmissibility will change
  * betaSet - is an array of beta values that will change in line with `ttBeta`
- * nBeds - is the country's capacity for hosiptal beds
+ * nBeds - is the country's capacity for hospital beds
  * nICUBeds - is the country's capacity in Intensive Care
  * timeStart - is the timestep to begin the simulation
  * timeEnd - is the timestep to end the simulation
