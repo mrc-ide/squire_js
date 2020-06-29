@@ -21,7 +21,7 @@ jobs:
       - name: Install squire
         run: |
           R.exe -e "install.packages(c('V8', 'odin', 'deSolve', 'jsonlite', 'remotes'))"
-          R.exe -e "remotes::install_github(c('mrc-ide/odin.js', 'mrc-ide/squire'))"
+          R.exe -e "remotes::install_github(c('mrc-ide/odin.js', 'mrc-ide/squire@v0.4.8'))"
         shell: pwsh
       - name: Install Chrome
         run: |
@@ -29,7 +29,7 @@ jobs:
         shell: pwsh
       - name: Test bundle
         run: |
-          curl --output chromedriver.zip https://chromedriver.storage.googleapis.com/81.0.4044.69/chromedriver_win32.zip
+          curl --output chromedriver.zip https://chromedriver.storage.googleapis.com/84.0.4147.30/chromedriver_win32.zip
           unzip chromedriver.zip
           npm install
           npm run build
