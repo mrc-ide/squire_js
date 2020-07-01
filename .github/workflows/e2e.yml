@@ -25,12 +25,35 @@ jobs:
         shell: pwsh
       - name: Install Chrome
         run: |
-          $LocalTempDir = $env:TEMP; $ChromeInstaller = "ChromeInstaller.exe"; (new-object    System.Net.WebClient).DownloadFile('http://dl.google.com/chrome/install/375.126/chrome_installer.exe', "$LocalTempDir\$ChromeInstaller"); & "$LocalTempDir\$ChromeInstaller" /silent /install; $Process2Monitor =  "ChromeInstaller"; Do { $ProcessesFound = Get-Process | ?{$Process2Monitor -contains $_.Name} | Select-Object -ExpandProperty Name; If ($ProcessesFound) { "Still running: $($ProcessesFound -join ', ')" | Write-Host; Start-Sleep -Seconds 2 } else { rm "$LocalTempDir\$ChromeInstaller" -ErrorAction SilentlyContinue -Verbose } } Until (!$ProcessesFound)
+          $LocalTempDir = $env:TEMP
+          $ChromeInstaller = "ChromeInstaller.exe"
+          (new-object    System.Net.WebClient).DownloadFile('http://dl.google.com/chrome/install/375.126/chrome_installer.exe', "$LocalTempDir\$ChromeInstaller")
+          & "$LocalTempDir\$ChromeInstaller" /silent /install
+          $Process2Monitor =  "ChromeInstaller"
+          Do {
+            $ProcessesFound = Get-Process | ?{$Process2Monitor -contains $_.Name} | Select-Object -ExpandProperty Name
+            If ($ProcessesFound) {
+              "Still running: $($ProcessesFound -join ', ')" | Write-Host; Start-Sleep -Seconds 2
+            } else {
+              rm "$LocalTempDir\$ChromeInstaller" -ErrorAction SilentlyContinue -Verbose
+            }
+          } Until (!$ProcessesFound)
+        shell: pwsh
+      - name: Install Chromedriver
+        run: |
+          $chromeVersion = [System.Diagnostics.FileVersionInfo]::GetVersionInfo("C:\Program Files (x86)\Google\Chrome\Application\chrome.exe").FileVersion
+          $chromeDriverVersionPrefix = $chromeVersion.split(".")[0..2] -join "."
+          $chromeDriverVersionUrl = "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_" + $chromeDriverVersionPrefix
+          $chromeDriverVersion = Invoke-RestMethod -Uri $chromeDriverVersionUrl
+          $chromeDriverZipLink = "https://chromedriver.storage.googleapis.com/" + $chromeDriverVersion + "/chromedriver_win32.zip"
+          Write-Output "Will download $chromeDriverZipLink"
+          $chromeDriverZipFileLocation = "chromedriver_win32.zip"
+          Invoke-WebRequest -Uri $chromeDriverZipLink -OutFile $chromeDriverZipFileLocation
+          Expand-Archive $chromeDriverZipFileLocation -Force
+          Remove-Item -Path $chromeDriverZipFileLocation -Force
         shell: pwsh
       - name: Test bundle
         run: |
-          curl --output chromedriver.zip https://chromedriver.storage.googleapis.com/84.0.4147.30/chromedriver_win32.zip
-          unzip chromedriver.zip
           npm install
           npm run build
           npm run e2e
