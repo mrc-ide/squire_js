@@ -91,3 +91,25 @@ Results will be an object representing a table of data. It will have the followi
 Names: The names of the columns of the table. The first name will be t, identifying the time step column. The following names will identify the state and the age group being counted in that column. The age group will be identified in square brackets. E.g. the "S[1]" column represents the count for susceptables in the first age group.
 
 Y: A 2D array representing the rows of the table. The first dimension will depend on the time steps and resolution of the model. The second dimension will be the same size as "Names".
+
+#### beta and Rt
+
+The model is parameterised with a country specific `beta` value.
+
+To translate Rt values into beta values, you can divide them by the country
+specific eigenvalue, e.g:
+
+```
+import nigeriaData from './data/NGA.json';
+const r0 = 3;
+const rt = [r0, r0/2];
+const beta = rt.map(r => { return r / nigeriaData.eigenvalue });
+```
+
+You can translate back to Rt by multiplying by the eigenvalue:
+
+```
+import nigeriaData from './data/NGA.json';
+const beta = [nigeriaData.beta, nigeriaData.beta/2];
+const rt = beta.map(r => { return r * nigeriaData.eigenvalue });
+```

@@ -56,6 +56,20 @@ describe('runModel', function() {
     })
   });
 
+  it('can translate between beta from R0', function() {
+    const beta = [stlucia.beta, stlucia.beta/2];
+    const r0 = 3;
+    const rt = [r0, r0/2];
+
+    rt.map(r => { return r / stlucia.eigenvalue }).forEach((value, i) => {
+      expect(beta[i]).to.be.closeTo(value, 1e-6);
+    });
+
+    beta.map(b => { return b * stlucia.eigenvalue }).forEach((value, i) => {
+      expect(rt[i]).to.be.closeTo(value, 1e-6);
+    });
+  });
+
   it('parameterises beds correctly', function() {
     const expected = pars;
 
