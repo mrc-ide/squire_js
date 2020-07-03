@@ -97,19 +97,19 @@ Y: A 2D array representing the rows of the table. The first dimension will depen
 The model is parameterised with a country specific `beta` value.
 
 To translate Rt values into beta values, you can divide them by the country
-specific eigen value, e.g:
+specific eigenvalue, e.g:
 
 ```
 import nigeriaData from './data/NGA.json';
 const r0 = 3;
 const rt = [r0, r0/2];
-const beta = rt.map(r => { return r / nigeriaData.eigen });
+const beta = rt.map(r => { return r / nigeriaData.eigenvalue });
 ```
 
-You can translate back to Rt by multiplying by the eigen value:
+You can translate back to Rt by multiplying by the eigenvalue:
 
 ```
 import nigeriaData from './data/NGA.json';
 const beta = [nigeriaData.beta, nigeriaData.beta/2];
-const rt = beta.map(r => { return r * nigeriaData.eigen });
+const rt = beta.map(r => { return r * nigeriaData.eigenvalue });
 ```

@@ -11,7 +11,7 @@ names(countries) <- unique(squire::population$iso3c)
 
 out_dir <- args[1]
 for (iso3c in names(countries)) {
-  R0 <- 3;
+  R0 <- 3
   pars <- parameters_explicit_SEEIR(
     countries[[iso3c]],
     hosp_bed_capacity = 1, #dummy value
@@ -23,7 +23,7 @@ for (iso3c in names(countries)) {
     population = pars$population,
     contactMatrix = pars$mix_mat_set,
     beta = pars$beta,
-    eigen = R0 / pars$beta
+    eigenvalue = R0 / pars$beta
   )
 
   write_json(

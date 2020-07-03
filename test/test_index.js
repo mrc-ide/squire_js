@@ -61,11 +61,11 @@ describe('runModel', function() {
     const r0 = 3;
     const rt = [r0, r0/2];
 
-    rt.map(r => { return r / stlucia.eigen }).forEach((value, i) => {
+    rt.map(r => { return r / stlucia.eigenvalue }).forEach((value, i) => {
       expect(beta[i]).to.be.closeTo(value, 1e-6);
     });
 
-    beta.map(b => { return b * stlucia.eigen }).forEach((value, i) => {
+    beta.map(b => { return b * stlucia.eigenvalue }).forEach((value, i) => {
       expect(rt[i]).to.be.closeTo(value, 1e-6);
     });
   });
