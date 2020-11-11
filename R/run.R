@@ -20,13 +20,13 @@ for (country in countries) {
       population <- squire::get_population(country)$n
       m <- squire::get_mixing_matrix(country)
       output <- run_deterministic_SEIR_model(
-        population,
-        m,
-        c(0, 50),
-        c(R0, R0/2),
-        365,
-        bed,
-        bed
+        population = population,
+        contact_matrix_set = m,
+        tt_R0 = c(0, 50),
+        R0 = c(R0, R0/2),
+        time_period = 365,
+        hosp_bed_capacity = bed,
+        ICU_bed_capacity = bed
       )
 
       write_json(
