@@ -16,27 +16,40 @@ scenario <- 0
 for (country in countries) {
   for (bed in beds) {
     for (R0 in R0s) {
-      population <- squire::get_population(country)$n
+
+      # get an initial with the same seeds as before
+      population <- squire::get_population(country = country, simple_SEIR = FALSE)
+      init <- squire:::init_check_explicit(NULL, population$n, seeding_cases = 5)
+      init$S <- init$S + init$E1
+      init$E1 <- c(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0)
+      init$S <- init$S - c(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0)
+
+      # matrix for country
       m <- squire::get_mixing_matrix(country)
-      output <- run_deterministic_SEIR_model(
-        population = population,
+
+      output <- squire::run_deterministic_SEIR_model(
+        population = population$n,
         contact_matrix_set = m,
         tt_R0 = c(0, 50),
         R0 = c(R0, R0/2),
         time_period = 365,
         hosp_bed_capacity = bed,
         ICU_bed_capacity = bed,
-        day_return = TRUE
-      )
+        day_return = TRUE, 
+        init = init
+        )
 
       write_json(
         output$output,
         file.path(out_dir, paste0('output_', scenario, '.json')),
         pretty = TRUE,
         digits=NA
-      )
+        )
 
       output$parameters$mod_gen <- NULL
+      output$parameters$init <- NULL
+      output$parameters$walker_params <- NULL
+      output$parameters$day_return <- NULL
 
       write_json(
         output$parameters,
@@ -46,7 +59,7 @@ for (country in countries) {
         pretty=TRUE,
         digits=NA,
         force=TRUE
-      )
+        )
       scenario <- scenario + 1
     }
   }
