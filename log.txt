@@ -1,0 +1,15 @@
+N_age
+gamma_E
+gamma_not_get_ox_survive
+gamma_not_get_ox_die
+gamma_not_get_mv_survive
+gamma_not_get_mv_die
+gamma_rec
+ICU_bed_capacity
+N_age
+gamma_E
+gamma_not_get_ox_survive
+gamma_not_get_ox_die
+gamma_not_get_mv_survive
+gamma_not_get_mv_die
+gamma_rec

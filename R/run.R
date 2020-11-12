@@ -27,6 +27,7 @@ for (country in countries) {
       # matrix for country
       m <- squire::get_mixing_matrix(country)
 
+      # get the model run
       output <- squire::run_deterministic_SEIR_model(
         population = population$n,
         contact_matrix_set = m,
@@ -46,6 +47,7 @@ for (country in countries) {
         digits=NA
         )
 
+      # exact same pars as used to be exported by squire::run_deterministic_SEIR_model
       pars_needed <- c(
         "N_age", 
         "S_0", 
@@ -93,8 +95,8 @@ for (country in countries) {
         "prob_severe_death_treatment",
         "prob_severe_death_no_treatment",
         "p_dist",
-        "hosp_bed_capacity",
-        "ICU_bed_capacity",
+        "hosp_beds",
+        "ICU_beds",
         "tt_matrix",
         "mix_mat_set",
         "tt_beta",
