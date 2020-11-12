@@ -1,12 +1,13 @@
-FROM rocker/r-ver:3.6.1
+FROM rocker/r-ver:4.0.3
 
 RUN apt update && apt install -y libv8-dev libcurl4-openssl-dev
 
 RUN R -e 'install.packages( \
-  c("V8", "odin", "deSolve", "jsonlite", "remotes"))'
+  c("odin", "deSolve", "jsonlite", "remotes"))'
 
-RUN R -e 'library(remotes); install_github(c("mrc-ide/odin.js", \
-"mrc-ide/squire"))'
+RUN R -e 'Sys.setenv(DOWNLOAD_STATIC_LIBV8 = 1); \
+  remotes::install_github( \
+  c("jeroen/V8@v3.4.0", "mrc-ide/odin.js", "mrc-ide/squire@v0.4.8"))'
 
 # Install node
 RUN apt install -y curl

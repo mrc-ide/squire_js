@@ -43,7 +43,7 @@ describe('runModel', function() {
       const expected_value = expected[key];
       if (Array.isArray(value)) {
         if (value.length == 1) {
-          expect(value[0]).to.be.closeTo(expected_value, 1e-6);
+          expect(value[0]).to.be.closeTo(expected_value[0], 1e-6);
         } else {
           const e_flat = flattenNested(expected[key]);
           flattenNested(value).forEach((v, i) => {
