@@ -13,7 +13,6 @@ beds <- c(100, 100000, 100000000)
 R0s <- c(4, 3, 2, 1)
 
 scenario <- 0
-
 for (country in countries) {
   for (bed in beds) {
     for (R0 in R0s) {
@@ -26,7 +25,8 @@ for (country in countries) {
         R0 = c(R0, R0/2),
         time_period = 365,
         hosp_bed_capacity = bed,
-        ICU_bed_capacity = bed
+        ICU_bed_capacity = bed,
+        day_return = TRUE
       )
 
       write_json(
@@ -36,16 +36,18 @@ for (country in countries) {
         digits=NA
       )
 
+      output$parameters$mod_gen <- NULL
+
       write_json(
         output$parameters,
         file.path(out_dir, paste0('pars_', scenario, '.json')),
         auto_unbox=TRUE,
         matrix='columnmajor',
         pretty=TRUE,
-        digits=NA
+        digits=NA,
+        force=TRUE
       )
       scenario <- scenario + 1
     }
   }
 }
-
