@@ -46,13 +46,63 @@ for (country in countries) {
         digits=NA
         )
 
-      output$parameters$mod_gen <- NULL
-      output$parameters$init <- NULL
-      output$parameters$walker_params <- NULL
-      output$parameters$day_return <- NULL
+      pars_needed <- c(
+        "N_age", 
+        "S_0", 
+        "E1_0",
+        "E2_0",
+        "IMild_0",
+        "ICase1_0",
+        "ICase2_0",
+        "IOxGetLive1_0",
+        "IOxGetLive2_0",
+        "IOxGetDie1_0",
+        "IOxGetDie2_0",
+        "IOxNotGetLive1_0",
+        "IOxNotGetLive2_0",
+        "IOxNotGetDie1_0",
+        "IOxNotGetDie2_0",
+        "IMVGetLive1_0",
+        "IMVGetLive2_0",
+        "IMVGetDie1_0",
+        "IMVGetDie2_0",
+        "IMVNotGetLive1_0",
+        "IMVNotGetLive2_0",
+        "IMVNotGetDie1_0",
+        "IMVNotGetDie2_0",
+        "IRec1_0",
+        "IRec2_0",
+        "R_0",
+        "D_0",
+        "gamma_E",
+        "gamma_R",
+        "gamma_hosp",
+        "gamma_get_ox_survive",
+        "gamma_get_ox_die",
+        "gamma_not_get_ox_survive",
+        "gamma_not_get_ox_die",
+        "gamma_get_mv_survive",
+        "gamma_get_mv_die",
+        "gamma_not_get_mv_survive",
+        "gamma_not_get_mv_die",
+        "gamma_rec",
+        "prob_hosp",
+        "prob_severe",
+        "prob_non_severe_death_treatment",
+        "prob_non_severe_death_no_treatment",
+        "prob_severe_death_treatment",
+        "prob_severe_death_no_treatment",
+        "p_dist",
+        "hosp_bed_capacity",
+        "ICU_bed_capacity",
+        "tt_matrix",
+        "mix_mat_set",
+        "tt_beta",
+        "beta_set"
+        )
 
       write_json(
-        output$parameters,
+        output$parameters[names(output$parameters) %in% pars_needed],
         file.path(out_dir, paste0('pars_', scenario, '.json')),
         auto_unbox=TRUE,
         matrix='columnmajor',
