@@ -41,7 +41,7 @@ export const runModel = function(
 
   const user = {
     ...pars,
-    //S_0: true_pop,
+    S_0: true_pop,
     tt_matrix: [0],
     mix_mat_set: mixMatSet,
     tt_beta: ttBeta,

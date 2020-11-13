@@ -41,8 +41,8 @@ async function test() {
             [${beta}],
             ${bed},
             ${bed},
-            0,
-            365
+            1,
+            366
           )
           `
         )
