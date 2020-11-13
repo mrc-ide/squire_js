@@ -29,8 +29,7 @@ for (country in countries) {
 
       # get the model run
       output <- squire::run_deterministic_SEIR_model(
-        population = population$n,
-        contact_matrix_set = m,
+        country = country,
         tt_R0 = c(0, 50),
         R0 = c(R0, R0/2),
         time_period = 365,

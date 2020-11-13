@@ -41,8 +41,7 @@ import { runModel } from './squire.js'
 
 #### runModel
 
-This function is used to run the model and collect the output. It has the
-signature:
+This function is used to run the model and collect the output. In the newest release, we now provide an array for the probabilities for death in hospital dependening on treatmnet. It has the signature:
 
 ```js
 function runModel(
@@ -52,6 +51,8 @@ function runModel(
   betaSet,
   nBeds,
   nICUBeds,
+  probNonSevereDeathTreatment,
+  probSevereDeathTreatment,
   timeStart = 0,
   timeEnd = 250
 )
@@ -65,6 +66,8 @@ Parameters:
  * betaSet - is an array of beta values that will change in line with `ttBeta`
  * nBeds - is the country's capacity for hospital beds
  * nICUBeds - is the country's capacity in Intensive Care
+ * probNonSevereDeathTreatment - is the probability of death given you require general hospital bed
+ * probSevereDeathTreatment - is the probability of death given you require ICU bed
  * timeStart - is the timestep to begin the simulation
  * timeEnd - is the timestep to end the simulation
 
@@ -72,7 +75,9 @@ You can get some basic model output by running the following example:
 
 ```js
 import nigeriaData from './data/NGA.json';
-const beta = [nigeriaData.beta, nigeriaData.beta/2, nigeriaData.beta]);
+const beta = [nigeriaData.beta, nigeriaData.beta/2, nigeriaData.beta];
+const probNonSevereDeathTreatment = [nigeriaData.prob_non_severe_death_treatment];
+const probSevereDeathTreatment = [nigeriaData.prob_severe_death_treatment];
 let results = runModel(
   nigeriaData.population,
   nigeriaData.contactMatrix,
@@ -80,6 +85,8 @@ let results = runModel(
   beta,
   10000000000,
   10000000000,
+  probNonSevereDeathTreatment,
+  probSevereDeathTreatment,
   1,
   200
 );
