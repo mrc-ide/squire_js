@@ -98,8 +98,8 @@ describe('runModel', function() {
     );
 
     const actual = constructor.getCall(0).args[0];
-    expect(actual.hosp_bed_capacity).to.be.equal(10000);
-    expect(actual.ICU_bed_capacity).to.be.equal(100);
+    expect(actual.hosp_beds[0]).to.be.equal(10000);
+    expect(actual.ICU_beds[0]).to.be.equal(100);
   });
 
   it('Survives bad inputs', function() {

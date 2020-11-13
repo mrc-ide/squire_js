@@ -41,13 +41,13 @@ export const runModel = function(
 
   const user = {
     ...pars,
-    S_0: true_pop,
+    //S_0: true_pop,
     tt_matrix: [0],
     mix_mat_set: mixMatSet,
     tt_beta: ttBeta,
     beta_set: betaSet,
-    hosp_bed_capacity: nBeds,
-    ICU_bed_capacity: nICUBeds
+    hosp_beds: [nBeds],
+    ICU_beds: [nICUBeds]
   };
 
   const mod = new model(user);

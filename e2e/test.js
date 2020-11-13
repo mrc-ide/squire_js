@@ -70,7 +70,7 @@ async function test() {
           failed = true;
           console.log('failed. Writing diagnostics');
           // Write to file for diagnostics
-          const outPath = `.data/failure_${scenario}.json`;
+          const outPath = `data/failure_${scenario}.json`;
           fs.writeFileSync(
             outPath,
             JSON.stringify(actual.y, null, 4)
