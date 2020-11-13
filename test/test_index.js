@@ -25,6 +25,8 @@ describe('runModel', function() {
 
     const mm = stlucia.contactMatrix;
     const beta = [stlucia.beta, stlucia.beta/2];
+    const prob_severe_death_treatment = stlucia.prob_severe_death_treatment;
+    const prob_non_severe_death_treatment = stlucia.prob_non_severe_death_treatment;
     runModel(
       stlucia.population,
       mm,
@@ -32,6 +34,8 @@ describe('runModel', function() {
       beta,
       100,
       100,
+      prob_non_severe_death_treatment,
+      prob_severe_death_treatment,
       0,
       365
     );
@@ -98,8 +102,8 @@ describe('runModel', function() {
     );
 
     const actual = constructor.getCall(0).args[0];
-    expect(actual.hosp_bed_capacity).to.be.equal(10000);
-    expect(actual.ICU_bed_capacity).to.be.equal(100);
+    expect(actual.hosp_beds[0]).to.be.equal(10000);
+    expect(actual.ICU_beds[0]).to.be.equal(100);
   });
 
   it('Survives bad inputs', function() {

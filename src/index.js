@@ -9,6 +9,8 @@ export const runModel = function(
   betaSet,
   nBeds,
   nICUBeds,
+  probNonSevereDeathTreatment,
+  probSevereDeathTreatment,
   timeStart = 0,
   timeEnd = 250
   ) {
@@ -46,8 +48,10 @@ export const runModel = function(
     mix_mat_set: mixMatSet,
     tt_beta: ttBeta,
     beta_set: betaSet,
-    hosp_bed_capacity: nBeds,
-    ICU_bed_capacity: nICUBeds
+    prob_non_severe_death_treatment: probNonSevereDeathTreatment,
+    prob_severe_death_treatment: probSevereDeathTreatment,
+    hosp_beds: [nBeds],
+    ICU_beds: [nICUBeds]
   };
 
   const mod = new model(user);

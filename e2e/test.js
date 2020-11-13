@@ -30,9 +30,19 @@ async function test() {
   for (const country of [ 'LCA', 'NGA', 'IND' ]) {
     for (const bed of [ 100, 100000, 100000000 ]) {
       for (const R0 of [ 4, 3, 2, 1 ]) {
+
         let beta = JSON.parse(
           fs.readFileSync(`./data/pars_${scenario}.json`)
         ).beta_set;
+        
+        let prob_non_severe_death_treatment = JSON.parse(
+          fs.readFileSync(`./data/pars_${scenario}.json`)
+        ).prob_non_severe_death_treatment;
+
+        let prob_severe_death_treatment = JSON.parse(
+          fs.readFileSync(`./data/pars_${scenario}.json`)
+        ).prob_severe_death_treatment;
+
         let actual = browser.evaluate(
           `runModel(
             ${country}.population,
@@ -41,8 +51,10 @@ async function test() {
             [${beta}],
             ${bed},
             ${bed},
-            0,
-            365
+            [${prob_non_severe_death_treatment}],
+            [${prob_severe_death_treatment}],
+            1,
+            366
           )
           `
         )
@@ -70,7 +82,7 @@ async function test() {
           failed = true;
           console.log('failed. Writing diagnostics');
           // Write to file for diagnostics
-          const outPath = `.data/failure_${scenario}.json`;
+          const outPath = `data/failure_${scenario}.json`;
           fs.writeFileSync(
             outPath,
             JSON.stringify(actual.y, null, 4)

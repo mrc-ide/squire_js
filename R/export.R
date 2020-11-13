@@ -23,7 +23,9 @@ for (iso3c in names(countries)) {
     population = pars$population,
     contactMatrix = pars$mix_mat_set,
     beta = pars$beta,
-    eigenvalue = R0 / pars$beta
+    eigenvalue = R0 / pars$beta,
+    prob_non_severe_death_treatment = pars$prob_non_severe_death_treatment,
+    prob_severe_death_treatment = pars$prob_severe_death_treatment
   )
 
   write_json(
