@@ -1,3 +1,5 @@
+import pars from '../data/pars_0.json'
+
 export function flattenNested(input) {
   const stack = [...input];
   const res = [];
@@ -26,4 +28,8 @@ export const wellFormedArray = function(array, dims) {
       });
   }
   return array.length === dims[0];
+}
+
+export function reff(output, prob_hosp, mixingMatrix, beta0, eigen) {
+  return [0, 0];
 }
