@@ -7,6 +7,7 @@ const Browser = require('zombie');
 const browser = new Browser();
 const rollup = require('rollup');
 const tolerance = 1e-4;
+const request = require('request');
 
 async function load() {
   let bundle = await rollup.rollup({
@@ -97,13 +98,100 @@ async function test() {
   return failed;
 }
 
+
+async function test_from_online_json() {
+
+  let failed = false;
+  browser.evaluate("let p; let r;");
+  for (const country of [ 'GBR' ]) {
+
+        let beta = JSON.parse(
+          fs.readFileSync(`./data/${country}_test_fit.json`)
+        ).beta_set;
+
+        let tt_beta = JSON.parse(
+          fs.readFileSync(`./data/${country}_test_fit.json`)
+        ).tt_beta;
+        
+        let prob_non_severe_death_treatment = JSON.parse(
+          fs.readFileSync(`./data/${country}.json`)
+        ).prob_non_severe_death_treatment;
+
+        let prob_severe_death_treatment = JSON.parse(
+          fs.readFileSync(`./data/${country}.json`)
+        ).prob_severe_death_treatment;
+
+        let hosp_beds = JSON.parse(
+          fs.readFileSync(`./data/${country}_test_fit.json`)
+        ).hosp_beds;
+
+        let ICU_beds = JSON.parse(
+          fs.readFileSync(`./data/${country}_test_fit.json`)
+        ).ICU_beds;
+
+        let actual = browser.evaluate(
+          `runModel(
+            ${country}.population,
+            ${country}.contactMatrix,
+            [${tt_beta}],
+            [${beta}],
+            ${hosp_beds},
+            ${ICU_beds},
+            [${prob_non_severe_death_treatment}],
+            [${prob_severe_death_treatment}],
+            0,
+            365
+          )
+          `
+        )
+
+        const expected = JSON.parse(fs.readFileSync(
+          `./data/output_${country}_fit.json`,
+          'utf8')
+        );
+
+        let passed = approxEqualArray(
+          flattenNested(actual.y),
+          flattenNested(expected),
+          tolerance
+        );
+
+        console.log(`
+        --------------------
+        scenario: ${country} fit test
+        tolerance: ${tolerance}
+        `);
+        if (!passed) {
+          failed = true;
+          console.log('failed. Writing diagnostics');
+          // Write to file for diagnostics
+          const outPath = `data/failure_fit_test_${country}.json`;
+          fs.writeFileSync(
+            outPath,
+            JSON.stringify(actual.y, null, 4)
+          );
+        } else {
+          console.log('passed');
+          // Write to file for diagnostics
+          const outPath = `data/success_fit_test_${country}.json`;
+                    fs.writeFileSync(
+            outPath,
+            JSON.stringify(actual.y, null, 4)
+          );
+        }
+      }
+  return failed;
+}
+
+
 async function run() {
   await browser.visit(
     `file://${__dirname}/test_site.html`
   );
   await load();
-  const failed = await test();
-  process.exit(failed);
+  //const failed = await test();
+  const failed_online = await test_from_online_json();
+  process.exit(failed_online);
 }
 
 run()
