@@ -6,7 +6,10 @@
   "scripts": {
     "test": "mocha -r esm",
     "test:watch": "nodemon --watch . --exec 'npm test || true'",
-    "build:data": "Rscript ./R/export.R ./data && Rscript ./R/run.R ./data",
+    "build:data:export": "Rscript ./R/export.R ./data",
+    "build:data:test_run": "Rscript ./R/run.R ./data",
+    "build:data:test_reff": "Rscript ./R/reff_run.R ./data",
+    "build:data": "npm run build:data:export && npm run build:data:test_run && npm run build:data:test_reff",
     "build:odin": "Rscript ./R/bundle.R explicit_SEIR_deterministic.R build/squire.js",
     "attach_interface": "rollup -c >> build/squire.js",
     "build": "npm run build:data && npm run build:odin && npm run attach_interface",
