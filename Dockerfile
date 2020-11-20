@@ -7,7 +7,7 @@ RUN R -e 'install.packages( \
 
 RUN R -e 'Sys.setenv(DOWNLOAD_STATIC_LIBV8 = 1); \
   remotes::install_github( \
-  c("jeroen/V8@v3.4.0", "mrc-ide/odin.js", "mrc-ide/squire@v0.5.3"))'
+  c("jeroen/V8@v3.4.0", "mrc-ide/odin.js", "mrc-ide/squire@v0.5.4"))'
 
 # Install node
 RUN apt install -y curl

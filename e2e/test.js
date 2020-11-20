@@ -102,7 +102,6 @@ async function test() {
 async function test_from_online_json() {
 
   let failed = false;
-  browser.evaluate("let p; let r;");
   for (const country of [ 'GBR' ]) {
 
         let beta = JSON.parse(
@@ -189,9 +188,9 @@ async function run() {
     `file://${__dirname}/test_site.html`
   );
   await load();
-  //const failed = await test();
+  const failed = await test();
   const failed_online = await test_from_online_json();
-  process.exit(failed_online);
+  process.exit(failed_online && failed);
 }
 
 run()
