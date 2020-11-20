@@ -20,7 +20,7 @@ get_immunity_ratios <- function(out, Rt, t_now) {
   # in here we work out each time point the number of idnividuals in each age category in
   # the S compartment and then divide by the total population size in each age category
   # to give the proportion susceptible at each time point
-  prob_susc <- t(t(out$output[, index$S,])/pop)
+  prop_susc <- t(t(out$output[, index$S,])/pop)
 
   # Length 17 with relative R0 in each age category
   relative_R0_by_age <- prob_hosp*dur_ICase + (1-prob_hosp)*dur_IMild
@@ -30,7 +30,7 @@ get_immunity_ratios <- function(out, Rt, t_now) {
   adjusted_eigens <- vapply(
     seq(t_now),
     function(t) {
-      Re(eigen(mixing_matrix * prob_susc[t,] * relative_R0_by_age)$values[1])
+      Re(eigen(mixing_matrix * prop_susc[t,] * relative_R0_by_age)$values[1])
     },
     numeric(1)
   )
