@@ -47,19 +47,12 @@ for (country in countries) {
         digits=NA
         )
 
-      Rt <- c(rep(4, 49), rep(2, 364-49))
-      write_json(
-        get_immunity_ratios(output, Rt),
-        file.path(out_dir, paste0('output_reff_', scenario, '.json')),
-        pretty = TRUE,
-        digits=NA
-      )
-
       # exact same pars as used to be exported by squire::run_deterministic_SEIR_model
-     user_pars <- output$model$.__enclos_env__$private$user
+      user_pars <- output$model$.__enclos_env__$private$user
+      reff_pars <- c('prob_hosp', 'dur_ICase', 'dur_IMild')
 
       write_json(
-        output$parameters[names(output$parameters) %in% user_pars],
+        output$parameters[names(output$parameters) %in% c(user_pars, reff_pars)],
         file.path(out_dir, paste0('pars_', scenario, '.json')),
         auto_unbox=TRUE,
         matrix='columnmajor',

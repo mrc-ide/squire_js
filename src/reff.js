@@ -1,33 +1,44 @@
 import { wellFormedArray } from './utils.js';
+import { eig } from 'numericjs';
 
 import {
   create,
+  addDependencies,
   dotDivideDependencies,
+  dotMultiplyDependencies,
   eigsDependencies,
   subsetDependencies,
   indexDependencies,
   rangeDependencies,
   multiplyDependencies,
+  subtractDependencies,
+  transposeDependencies,
   squeezeDependencies
 } from 'mathjs';
 
 //build small version of math.js
 const {
+  add,
   dotDivide,
-  eigs,
+  dotMultiply,
   subset,
   index,
   range,
   transpose,
   multiply,
+  subtract,
   squeeze
 } = create({
+  addDependencies,
   dotDivideDependencies,
+  dotMultiplyDependencies,
   eigsDependencies,
   subsetDependencies,
   indexDependencies,
   rangeDependencies,
-  squeezeDependencies
+  subtractDependencies,
+  squeezeDependencies,
+  transposeDependencies
 }, {})
 
 import pars from '../data/pars_0.json'
@@ -36,6 +47,10 @@ const S_INDEX = range(1, 18);
 
 function rowDivide(m, a) {
   return m.map(row => dotDivide(row, a))
+}
+
+function colMultiply(m, a) {
+  return m.map(row => dotMultiply(row, a))
 }
 
 export function reff(output, rt, beta, population, mixingMatrix) {
@@ -58,14 +73,21 @@ export function reff(output, rt, beta, population, mixingMatrix) {
     population
   )
 
-  const relativeR0 = multiply(pars.prob_hosp, pars.dur_ICase[0])
-    + multiply(subtract(1, pars.prob_hosp), pars.dur_IMild);
+  const relativeR0 = add(
+    multiply(pars.prob_hosp, pars.dur_ICase),
+    multiply(subtract(1, pars.prob_hosp), pars.dur_IMild)
+  );
 
   const adjustedEigens = range(0, tNow).map(t => {
-    eigs(multiply(multiply(mixingMatrix, propSusc), relativeR0)).values[0]
+    return eig(
+      colMultiply(
+        colMultiply(mixingMatrix, propSusc[t]),
+        relativeR0
+      )
+    ).lambda.x[0]
   });
 
-  const ratios = dotDivide(multiply(beta, adjustedEigens), rt);
+  const ratios = dotDivide(dotMultiply(beta, adjustedEigens), rt);
 
-  return multiply(rt, ratios);
+  return dotMultiply(rt, ratios)._data;
 }

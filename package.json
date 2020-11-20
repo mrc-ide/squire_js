@@ -31,6 +31,7 @@
     "mathjs": "^8.0.1",
     "mocha": "^7.1.1",
     "nodemon": "^2.0.3",
+    "numericjs": "^1.2.6",
     "rollup": "^2.6.1",
     "rollup-plugin-babel": "^4.4.0",
     "sinon": "^9.0.2",
