@@ -116,7 +116,7 @@ create_test_case <- function(iso3c) {
     write_json(
     c(det_out$parameters[c("hosp_beds", "ICU_beds")],
       list("tt_beta" = tt_R0, "beta_set" = betas)),
-    file.path(out_dir, paste0(iso3c,'test_fit.json')),
+    file.path(out_dir, paste0(iso3c,'_test_fit.json')),
     pretty = TRUE,
     digits=NA
   )
