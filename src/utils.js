@@ -30,6 +30,5 @@ export const wellFormedArray = function(array, dims) {
   return array.length === dims[0];
 }
 
-export function reff(output, prob_hosp, mixingMatrix, beta0, eigen) {
-  return [0, 0];
+export function reff(output, rt, beta, mixingMatrix, prob_hosp) {
 }

@@ -2,9 +2,10 @@ import { flattenNested, reff } from '../src/utils.js'
 import { strict as assert } from 'assert'
 
 import pars from '../data/pars_0.json'
-import output from '../data/output_0.json'
-import reffOutput from '../data/output_reff_0.json'
-import stlucia from '../data/LCA.json'
+import reffModelOutput from '../data/output_reff_squire.json'
+import reffOutput from '../data/output_reff.json'
+import brazil from '../data/BRA.json'
+import inputs from './assets/BRA_inputs.json'
 
 describe('flattenNested', function() {
   it('flattenNesteds a 3d array in the correct order', function() {
@@ -27,18 +28,15 @@ describe('flattenNested', function() {
 });
 
 describe('reff', function() {
-  it('returns the correct reff for the test run of St. Lucia', function() {
-    const R0 = 4;
-    const beta0 = R0 / stlucia.eigenvalue;
-    const t = [0, 50];
-    const Rt = [4, 2];
+  it('Comparison test for Brazil', function() {
+    const Rt = inputs.input_params.map(d => d.Rt);
+    const beta = inputs.input_params.map(d => d.beta_set);
     const actual = reff(
-      output,
+      reffModelOutput,
       Rt,
-      stlucia.contactMatrix, //is this the right shape?
-      stlucia.prob_hosp,
-      beta0,
-      stlucia.eigenvalue
+      beta,
+      brazil.contactMatrixScaledAge,
+      brazil.prob_hosp
     );
     assert.deepEqual(actual, reffOutput);
   });
