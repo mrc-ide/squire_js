@@ -22,6 +22,10 @@ for (iso3c in names(countries)) {
   country_data <- list(
     population = pars$population,
     contactMatrix = pars$mix_mat_set,
+    contactMatrixScaledAge = squire:::process_contact_matrix_scaled_age(
+      pars$contact_matrix_set[[1]],
+      pars$population
+    ),
     beta = pars$beta,
     eigenvalue = R0 / pars$beta,
     prob_non_severe_death_treatment = pars$prob_non_severe_death_treatment,
