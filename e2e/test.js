@@ -26,7 +26,7 @@ async function load() {
 async function test() {
   let scenario = 0;
   let failed = false;
-  browser.evaluate("let p; let r;");
+  browser.evaluate("let p; let r; let output;");
   for (const country of [ 'LCA', 'NGA', 'IND' ]) {
     for (const bed of [ 100, 100000, 100000000 ]) {
       for (const R0 of [ 4, 3, 2, 1 ]) {
@@ -44,7 +44,7 @@ async function test() {
         ).prob_severe_death_treatment;
 
         let actual = browser.evaluate(
-          `runModel(
+          `output = runModel(
             ${country}.population,
             ${country}.contactMatrix,
             [0, 50],
@@ -90,6 +90,26 @@ async function test() {
         } else {
           console.log('passed');
         }
+
+
+        /*
+         * Basic test of Reff
+        */
+        const reff = browser.evaluate(
+          `reff(
+            output.y,
+            [${4}],
+            [${beta[0]}],
+            ${country}.population,
+            ${country}.contactMatrixScaledAge
+          )
+          `
+        )
+        if (!reff[0] == 4) {
+          failed = true;
+          console.log(`Expected ${reff[0]} == 4 for t = 0`)
+        }
+
         scenario++;
       }
     }

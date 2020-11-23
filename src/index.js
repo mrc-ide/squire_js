@@ -1,6 +1,8 @@
 
-import { wellFormedArray } from './utils.js'
-import pars from '../data/pars_0.json'
+import { wellFormedArray } from './utils.js';
+import pars from '../data/pars_0.json';
+import { getModel } from '../build/squire_odin.js';
+export { reff } from './reff.js';
 
 export const runModel = function(
   population,
@@ -35,7 +37,7 @@ export const runModel = function(
     throw Error("Bed counts must be greater than or equal to 0");
   }
 
-  const model = Object.values(odin)[0];
+  const model = getModel();
   const nGroups = population.length;
 
   // Remove the seed exposed population
@@ -54,7 +56,7 @@ export const runModel = function(
     ICU_beds: [nICUBeds]
   };
 
-  const mod = new model(user);
+  const mod = new model(user, 'ignore');
   const dt = 1;
   let t = [];
   for (let i = 0; i < (timeEnd - timeStart) / dt; ++i) {

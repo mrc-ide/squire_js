@@ -1,19 +1,19 @@
 import { wellFormedArray } from './utils.js';
-import { eig } from 'numericjs';
+import { eigenvalues } from './eigenvalues.js';
 
 import {
   create,
   addDependencies,
   dotDivideDependencies,
   dotMultiplyDependencies,
-  eigsDependencies,
   subsetDependencies,
   indexDependencies,
   rangeDependencies,
   multiplyDependencies,
   subtractDependencies,
   transposeDependencies,
-  squeezeDependencies
+  squeezeDependencies,
+  flattenDependencies
 } from 'mathjs';
 
 //build small version of math.js
@@ -27,18 +27,20 @@ const {
   transpose,
   multiply,
   subtract,
-  squeeze
+  squeeze,
+  flatten
 } = create({
   addDependencies,
   dotDivideDependencies,
   dotMultiplyDependencies,
-  eigsDependencies,
+  multiplyDependencies,
   subsetDependencies,
   indexDependencies,
   rangeDependencies,
   subtractDependencies,
   squeezeDependencies,
-  transposeDependencies
+  transposeDependencies,
+  flattenDependencies
 }, {})
 
 import pars from '../data/pars_0.json'
@@ -79,12 +81,14 @@ export function reff(output, rt, beta, population, mixingMatrix) {
   );
 
   const adjustedEigens = range(0, tNow).map(t => {
-    return eig(
-      colMultiply(
-        colMultiply(mixingMatrix, propSusc[t]),
-        relativeR0
+    return eigenvalues(
+      flatten(
+        colMultiply(
+          colMultiply(mixingMatrix, propSusc[t]),
+          relativeR0
+        )
       )
-    ).lambda.x[0]
+    )[0]
   });
 
   const ratios = dotDivide(dotMultiply(beta, adjustedEigens), rt);
