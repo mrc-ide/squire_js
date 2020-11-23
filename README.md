@@ -105,7 +105,7 @@ The model is parameterised with a country specific `beta` value.
 To translate Rt values into beta values, you can divide them by the country
 specific eigenvalue, e.g:
 
-```
+```js
 import nigeriaData from './data/NGA.json';
 const r0 = 3;
 const rt = [r0, r0/2];
@@ -114,8 +114,33 @@ const beta = rt.map(r => { return r / nigeriaData.eigenvalue });
 
 You can translate back to Rt by multiplying by the eigenvalue:
 
-```
+```js
 import nigeriaData from './data/NGA.json';
 const beta = [nigeriaData.beta, nigeriaData.beta/2];
 const rt = beta.map(r => { return r * nigeriaData.eigenvalue });
 ```
+
+#### Reff
+
+We provide function to estimate Reff from model outputs:
+
+```js
+function reff(
+  output,
+  rt,
+  beta,
+  population,
+  mixingMatrix
+)
+```
+
+Parameters:
+
+ * output - the `y` component of the model output returned from runModel
+ * rt - an array containing Rt for the first timesteps of the output
+ * beta - an array with corresponding beta values for rt
+ * population - an array with population counts for each age group (called
+   `population` in the country json files)
+ * mixingMatrix - a 2D array representing an age scaled mixing matrix (called `contactMatrixScaledAge` in the country json files)
+
+This returns an array of Reff values for the corresponding rt and beta arguments

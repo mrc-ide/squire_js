@@ -1,12 +1,14 @@
-import { runModel } from "../src/index.js"
+import { runModel } from "../src/index.js";
+import * as odin from '../build/squire_odin.js';
 
-import { flattenNested } from '../src/utils.js'
+import { flattenNested } from '../src/utils.js';
 
-import pars from '../data/pars_1.json'
-import { expect } from 'chai'
-import sinon from 'sinon'
+import pars from '../data/pars_1.json';
+import { expect } from 'chai';
+import sinon from 'sinon';
 
-import stlucia from '../data/LCA.json'
+import stlucia from '../data/LCA.json';
+
 
 describe('runModel', function() {
   it('processes basic parameters correctly', function() {
@@ -21,7 +23,7 @@ describe('runModel', function() {
       run() {}
     }
 
-    global.odin = [ model ];
+    const modelStub = sinon.stub(odin, 'getModel').callsFake(() => model);
 
     const mm = stlucia.contactMatrix;
     const beta = [stlucia.beta, stlucia.beta/2];
@@ -57,6 +59,8 @@ describe('runModel', function() {
       } else {
         expect(value).to.be.closeTo(expected_value, 1e-6);
       }
+
+      modelStub.restore();
     })
   });
 
@@ -86,7 +90,7 @@ describe('runModel', function() {
       run() {}
     }
 
-    global.odin = [ model ];
+    const modelStub = sinon.stub(odin, 'getModel').callsFake(() => model);
 
     const mm = stlucia.contactMatrix;
     const beta = [stlucia.beta, stlucia.beta/2, stlucia.beta];
@@ -104,6 +108,7 @@ describe('runModel', function() {
     const actual = constructor.getCall(0).args[0];
     expect(actual.hosp_beds[0]).to.be.equal(10000);
     expect(actual.ICU_beds[0]).to.be.equal(100);
+    modelStub.restore();
   });
 
   it('Survives bad inputs', function() {

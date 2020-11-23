@@ -1,5 +1,6 @@
 library(squire)
 library(jsonlite)
+source('./R/reff.R')
 
 args = commandArgs(trailingOnly=TRUE)
 if (length(args) != 1) {
@@ -47,10 +48,11 @@ for (country in countries) {
         )
 
       # exact same pars as used to be exported by squire::run_deterministic_SEIR_model
-     user_pars <- output$model$.__enclos_env__$private$user
+      user_pars <- output$model$.__enclos_env__$private$user
+      reff_pars <- c('prob_hosp', 'dur_ICase', 'dur_IMild')
 
       write_json(
-        output$parameters[names(output$parameters) %in% user_pars],
+        output$parameters[names(output$parameters) %in% c(user_pars, reff_pars)],
         file.path(out_dir, paste0('pars_', scenario, '.json')),
         auto_unbox=TRUE,
         matrix='columnmajor',
