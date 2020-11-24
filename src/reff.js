@@ -51,11 +51,11 @@ function rowDivide(m, a) {
   return m.map(row => dotDivide(row, a))
 }
 
-function colMultiply(m, a) {
+function rowMultiply(m, a) {
   return m.map(row => dotMultiply(row, a))
 }
 
-export function reff(output, rt, beta, population, mixingMatrix) {
+export function reff(output, rt, beta, population, mixingMatrix, tSubset = null) {
   if (!wellFormedArray(mixingMatrix, [population.length, population.length])) {
     throw Error("mixMatSet must have the dimensions nAge x nAge");
   }
@@ -64,14 +64,23 @@ export function reff(output, rt, beta, population, mixingMatrix) {
     throw Error("mismatch between population and mixing matrix size");
   }
 
-  const tNow = rt.length;
+  if (beta.length !== rt.length) {
+    throw Error("mismatch between rt and beta size");
+  }
+
+  if (tSubset == null) {
+    tSubset = [...Array(rt.length).keys()];
+  } else {
+    rt = subset(rt, index(tSubset));
+    beta = subset(beta, index(tSubset));
+  }
 
   //remove singleton arrays
   output = squeeze(output);
   population = squeeze(population);
 
   const propSusc = rowDivide(
-    subset(output, index(range(0, tNow), S_INDEX)),
+    subset(output, index(tSubset, S_INDEX)),
     population
   )
 
@@ -80,11 +89,11 @@ export function reff(output, rt, beta, population, mixingMatrix) {
     multiply(subtract(1, pars.prob_hosp), pars.dur_IMild)
   );
 
-  const adjustedEigens = range(0, tNow).map(t => {
+  const adjustedEigens = tSubset.map((_, i) => {
     return eigenvalues(
       flatten(
-        colMultiply(
-          colMultiply(mixingMatrix, propSusc[t]),
+        rowMultiply(
+          rowMultiply(mixingMatrix, propSusc[i]),
           relativeR0
         )
       )
@@ -93,5 +102,5 @@ export function reff(output, rt, beta, population, mixingMatrix) {
 
   const ratios = dotDivide(dotMultiply(beta, adjustedEigens), rt);
 
-  return dotMultiply(rt, ratios)._data;
+  return dotMultiply(rt, ratios);
 }
