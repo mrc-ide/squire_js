@@ -130,7 +130,8 @@ function reff(
   rt,
   beta,
   population,
-  mixingMatrix
+  mixingMatrix,
+  tSubset = null
 )
 ```
 
@@ -142,5 +143,8 @@ Parameters:
  * population - an array with population counts for each age group (called
    `population` in the country json files)
  * mixingMatrix - a 2D array representing an age scaled mixing matrix (called `contactMatrixScaledAge` in the country json files)
+ * tSubset - an array of timesteps to calculate Reff for
 
-This returns an array of Reff values for the corresponding rt and beta arguments
+This returns an array of Reff values for the output at the timesteps in `tSubset`.
+If `tSubset` is null, it will return Reff values for all the rt and beta values
+given.
