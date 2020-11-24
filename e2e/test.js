@@ -123,29 +123,17 @@ async function test_from_online_json() {
   let failed = false;
   for (const country of [ 'GBR' ]) {
 
-        let beta = JSON.parse(
-          fs.readFileSync(`./data/${country}_test_fit.json`)
-        ).beta_set;
-
-        let tt_beta = JSON.parse(
-          fs.readFileSync(`./data/${country}_test_fit.json`)
-        ).tt_beta;
+        let {
+          beta,
+          tt_beta,
+          hosp_beds,
+          ICU_beds
+        } = JSON.parse(fs.readFileSync(`./data/${country}_test_fit.json`));
         
-        let prob_non_severe_death_treatment = JSON.parse(
-          fs.readFileSync(`./data/${country}.json`)
-        ).prob_non_severe_death_treatment;
-
-        let prob_severe_death_treatment = JSON.parse(
-          fs.readFileSync(`./data/${country}.json`)
-        ).prob_severe_death_treatment;
-
-        let hosp_beds = JSON.parse(
-          fs.readFileSync(`./data/${country}_test_fit.json`)
-        ).hosp_beds;
-
-        let ICU_beds = JSON.parse(
-          fs.readFileSync(`./data/${country}_test_fit.json`)
-        ).ICU_beds;
+        let {
+          prob_non_severe_death_treatment,
+          prob_severe_death_treatment
+        } = JSON.parse(fs.readFileSync(`./data/${country}.json`))
 
         let actual = browser.evaluate(
           `runModel(
