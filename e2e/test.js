@@ -7,7 +7,6 @@ const Browser = require('zombie');
 const browser = new Browser();
 const rollup = require('rollup');
 const tolerance = 1e-4;
-const request = require('request');
 
 async function load() {
   let bundle = await rollup.rollup({
