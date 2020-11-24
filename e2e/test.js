@@ -124,10 +124,10 @@ async function test_from_online_json() {
   for (const country of [ 'GBR' ]) {
 
         let {
-          beta,
-          tt_beta,
           hosp_beds,
-          ICU_beds
+          ICU_beds,
+          tt_beta, 
+          beta_set
         } = JSON.parse(fs.readFileSync(`./data/${country}_test_fit.json`));
         
         let {
@@ -140,7 +140,7 @@ async function test_from_online_json() {
             ${country}.population,
             ${country}.contactMatrix,
             [${tt_beta}],
-            [${beta}],
+            [${beta_set}],
             ${hosp_beds},
             ${ICU_beds},
             [${prob_non_severe_death_treatment}],
