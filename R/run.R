@@ -86,7 +86,7 @@ create_test_case <- function(iso3c) {
   population = squire::get_population(country)
   
   
-  betas <- unlist(lapply(json, "[[", "beta_set"))
+  betas <- vapply(json, "[[", numeric(1), "beta_set")
   tt_R0 <- unlist(lapply(json, "[[", "tt_beta"))
   dates <- unlist(lapply(json, "[[", "date"))
  
