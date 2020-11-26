@@ -64,3 +64,67 @@ for (country in countries) {
     }
   }
 }
+
+
+create_test_case <- function(iso3c) {
+  
+  country <- squire::population$country[squire::population$iso3c==iso3c][1]
+  json <- NULL
+  try({
+    json_path <- file.path("https://raw.githubusercontent.com/mrc-ide/global-lmic-reports/master/",iso3c,"input_params.json")
+    json <- jsonlite::read_json(json_path)
+  })
+  
+  ## convert this into params for deterministic
+  beta_to_R0 <- function(beta, dur_IMild, dur_ICase, prob_hosp, mixing_matrix) {
+    squire:::adjusted_eigen(dur_IMild = dur_IMild, dur_ICase = dur_ICase,
+                            prob_hosp = prob_hosp,
+                            mixing_matrix =  mixing_matrix) * beta
+  }
+  
+  contact_matrix = squire::get_mixing_matrix(country)
+  population = squire::get_population(country)
+  
+  
+  betas <- vapply(json, "[[", numeric(1), "beta_set")
+  tt_R0 <- unlist(lapply(json, "[[", "tt_beta"))
+  dates <- unlist(lapply(json, "[[", "date"))
+ 
+  # get an initial with the same seeds as before
+  population <- squire::get_population(country = country, simple_SEIR = FALSE)
+  init <- squire:::init_check_explicit(NULL, population$n, seeding_cases = 5)
+  init$S <- init$S + init$E1
+  init$E1 <- c(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0)
+  init$S <- init$S - c(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0)
+  
+  # run model
+  det_out <- squire::run_deterministic_SEIR_model(
+    country = country,
+    beta_set = betas,
+    walker_params = FALSE,
+    init = init,
+    day_return = TRUE,
+    tt_R0 = tt_R0+1,
+    R0 = tt_R0,
+    time_period = 365)
+  
+  write_json(
+    det_out$output,
+    file.path(out_dir, paste0('output_',iso3c,'_fit.json')),
+    pretty = TRUE,
+    digits=NA
+  )
+
+    write_json(
+    c(det_out$parameters[c("hosp_beds", "ICU_beds")],
+      list("tt_beta" = tt_R0, "beta_set" = betas)),
+    file.path(out_dir, paste0(iso3c,'_test_fit.json')),
+    pretty = TRUE,
+    digits=NA
+  )
+
+
+  
+}
+
+create_test_case("GBR")

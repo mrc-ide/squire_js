@@ -117,13 +117,87 @@ async function test() {
   return failed;
 }
 
+
+async function test_from_online_json() {
+
+  let failed = false;
+  for (const country of [ 'GBR' ]) {
+
+        let {
+          hosp_beds,
+          ICU_beds,
+          tt_beta, 
+          beta_set
+        } = JSON.parse(fs.readFileSync(`./data/${country}_test_fit.json`));
+        
+        let {
+          prob_non_severe_death_treatment,
+          prob_severe_death_treatment
+        } = JSON.parse(fs.readFileSync(`./data/${country}.json`))
+
+        let actual = browser.evaluate(
+          `runModel(
+            ${country}.population,
+            ${country}.contactMatrix,
+            [${tt_beta}],
+            [${beta_set}],
+            ${hosp_beds},
+            ${ICU_beds},
+            [${prob_non_severe_death_treatment}],
+            [${prob_severe_death_treatment}],
+            0,
+            365
+          )
+          `
+        )
+
+        const expected = JSON.parse(fs.readFileSync(
+          `./data/output_${country}_fit.json`,
+          'utf8')
+        );
+
+        let passed = approxEqualArray(
+          flattenNested(actual.y),
+          flattenNested(expected),
+          tolerance
+        );
+
+        console.log(`
+        --------------------
+        scenario: ${country} fit test
+        tolerance: ${tolerance}
+        `);
+        if (!passed) {
+          failed = true;
+          console.log('failed. Writing diagnostics');
+          // Write to file for diagnostics
+          const outPath = `data/failure_fit_test_${country}.json`;
+          fs.writeFileSync(
+            outPath,
+            JSON.stringify(actual.y, null, 4)
+          );
+        } else {
+          console.log('passed');
+          // Write to file for diagnostics
+          const outPath = `data/success_fit_test_${country}.json`;
+                    fs.writeFileSync(
+            outPath,
+            JSON.stringify(actual.y, null, 4)
+          );
+        }
+      }
+  return failed;
+}
+
+
 async function run() {
   await browser.visit(
     `file://${__dirname}/test_site.html`
   );
   await load();
   const failed = await test();
-  process.exit(failed);
+  const failed_online = await test_from_online_json();
+  process.exit(failed_online && failed);
 }
 
 run()
