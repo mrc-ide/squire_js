@@ -10,8 +10,8 @@ export default {
   },
   plugins: [
     json(),
-    babel({ babelHelpers: 'bundled' }),
-    nodeResolve({ preferBuiltins: true }),
-    commonjs()
-  ],
+    nodeResolve({ browser: true, preferBuiltins: true }),
+    commonjs(),
+    babel({ babelHelpers: 'bundled' })
+  ]
 };

@@ -91,11 +91,9 @@ export function reff(output, rt, beta, population, mixingMatrix, tSubset = null)
 
   const adjustedEigens = tSubset.map((_, i) => {
     return leadingEigenvalue(
-      flatten(
-        rowMultiply(
-          rowMultiply(mixingMatrix, propSusc[i]),
-          relativeR0
-        )
+      rowMultiply(
+        rowMultiply(mixingMatrix, propSusc[i]),
+        relativeR0
       )
     );
   });
