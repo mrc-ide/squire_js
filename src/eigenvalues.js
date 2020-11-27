@@ -1,17 +1,4 @@
 import {
-  create,
-  randomDependencies,
-  dotMultiplyDependencies,
-  divideDependencies,
-  normDependencies,
-  maxDependencies,
-  absDependencies,
-  sumDependencies,
-  dotDependencies,
-  subtractDependencies
-} from 'mathjs';
-
-const {
   random,
   multiply,
   dotMultiply,
@@ -22,17 +9,7 @@ const {
   sum,
   dot,
   subtract
-} = create({
-  randomDependencies,
-  dotMultiplyDependencies,
-  divideDependencies,
-  normDependencies,
-  maxDependencies,
-  absDependencies,
-  sumDependencies,
-  dotDependencies,
-  subtractDependencies
-}, {});
+} from './math_bundle.js'
 
 function raleighQuotient(m, x) {
   return dot(multiply(m, x), x) / dot(x, x)
