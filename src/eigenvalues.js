@@ -108,8 +108,14 @@ function qr(mat) {
 }
 
 // list of eigen values square matrix (allow non symmetric)
-export function eigenvalues(mat) {
+function eigenvalues(mat) {
     const ut = qr(householder(mat));
     const n = Math.sqrt(ut.length);
     return range(n, i => ut[i * n + i]);
+}
+
+export function leadingEigenvalue(mat) {
+  const lambda = eigenvalues(mat);
+  const absLambda = lambda.map(Math.abs);
+  return lambda[absLambda.indexOf(Math.max(...absLambda))]
 }
