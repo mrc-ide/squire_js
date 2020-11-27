@@ -1,5 +1,5 @@
 import { wellFormedArray } from './utils.js';
-import { eigenvalues } from './eigenvalues.js';
+import { leadingEigenvalue } from './eigenvalues.js';
 
 import {
   create,
@@ -90,14 +90,14 @@ export function reff(output, rt, beta, population, mixingMatrix, tSubset = null)
   );
 
   const adjustedEigens = tSubset.map((_, i) => {
-    return eigenvalues(
+    return leadingEigenvalue(
       flatten(
         rowMultiply(
           rowMultiply(mixingMatrix, propSusc[i]),
           relativeR0
         )
       )
-    )[0]
+    );
   });
 
   const ratios = dotDivide(dotMultiply(beta, adjustedEigens), rt);
