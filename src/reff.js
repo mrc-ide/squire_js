@@ -2,22 +2,6 @@ import { wellFormedArray } from './utils.js';
 import { leadingEigenvalue } from './eigenvalues.js';
 
 import {
-  create,
-  addDependencies,
-  dotDivideDependencies,
-  dotMultiplyDependencies,
-  subsetDependencies,
-  indexDependencies,
-  rangeDependencies,
-  multiplyDependencies,
-  subtractDependencies,
-  transposeDependencies,
-  squeezeDependencies,
-  flattenDependencies
-} from 'mathjs';
-
-//build small version of math.js
-const {
   add,
   dotDivide,
   dotMultiply,
@@ -27,21 +11,8 @@ const {
   transpose,
   multiply,
   subtract,
-  squeeze,
-  flatten
-} = create({
-  addDependencies,
-  dotDivideDependencies,
-  dotMultiplyDependencies,
-  multiplyDependencies,
-  subsetDependencies,
-  indexDependencies,
-  rangeDependencies,
-  subtractDependencies,
-  squeezeDependencies,
-  transposeDependencies,
-  flattenDependencies
-}, {})
+  squeeze
+} from './math_bundle.js';
 
 import pars from '../data/pars_0.json'
 
