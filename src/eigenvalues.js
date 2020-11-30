@@ -17,6 +17,8 @@ function raleighQuotient(m, x) {
 
 function powerIteration(m, n = 100, error = 1e-6) {
   const max_m = max(m)
+  // Pick a random vector x (we don't want it to be orthogonal)
+  // This is unlikely with large matrices m
   let x = Array(m[0].length).fill(0).map(() => { return random(1, max_m) });
   let i = 0;
   let new_x;
